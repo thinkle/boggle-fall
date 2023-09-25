@@ -30,7 +30,7 @@
   div.words {
     min-height: 200px;
     max-height: calc(100vh - var(--block-height)*6);
-    overflow-y: scroll;
+    overflow: scroll;
     max-width: calc(100vw - var(--block-width));
   }
   
