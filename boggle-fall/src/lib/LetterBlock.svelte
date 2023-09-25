@@ -21,13 +21,23 @@
   class:value10={score === 10}
   class:selected>
   {letter.toLocaleUpperCase()}
+  <div class="letter-score">
+    {score}
+  </div>
 </div>  
 
 <style>
+  .letter-score {
+    position: absolute;
+    bottom: 4px;
+    right: 4px;
+    font-size: x-small;
+    font-weight: 300;
+  }
   .selected {
     filter: brightness(1.1)drop-shadow(2px 4px 6px black);
   }
-  div {
+  div.letter-block {
     user-select: none;
     box-sizing: border-box;
     width: var(--block-width,32px);
