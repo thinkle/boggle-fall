@@ -25,7 +25,7 @@
 
 <style>
   .selected {
-    filter: invert()
+    filter: brightness(1.1)drop-shadow(2px 4px 6px black);
   }
   div {
     user-select: none;

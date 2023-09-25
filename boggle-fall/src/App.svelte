@@ -1,7 +1,8 @@
 <script lang="ts">
-  
-  import WordScore from './WordScore.svelte';
+  import TitleBar from './TitleBar.svelte';
 
+  import WordList from './WordList.svelte';
+  import WordScore from './WordScore.svelte';
   import EffectCanvas from './EffectCanvas.svelte';    
   import LetterBlock from './lib/LetterBlock.svelte'
   import {send,receive} from './transition';
@@ -133,17 +134,16 @@
   
 
 </script>
-<div class="wrap" on:click={resetSelected}
-  on:touchstart={onTouchStart}
-  on:touchend={onTouchEnd}
-  on:touchmove={onTouchMove}
->
-  
+<div class="wrap" 
+>  
+  <TitleBar {score}/>
   <div class="center" on:click|stopPropagation>
-    <div class="total-box">
-      Score: {score}
-    </div>
+    
     <main bind:this={grid}
+      on:click={resetSelected}
+      on:touchstart={onTouchStart}
+      on:touchend={onTouchEnd}
+      on:touchmove={onTouchMove}
       on:mouseup={resetSelected}      
     >
       <EffectCanvas parent={grid} selectedElements={$selectedElements}/>
@@ -181,35 +181,21 @@
       
     </div>
   </div>
-  <div style="max-height:600px">
-    Words:
-    <ol>
-      {#each $words as word, n}
-        <li in:fly={{y:-50}}>{n+1}. 
-          {#each word as letter (letter.id)}
-            <div 
-               animate:flip
-               in:receive={{key:letter.id,duration:1000}} 
-               out:send={{key:letter.id,duration:1000}}>
-              <LetterBlock letter={letter.letter} selected={n==$words.length-1}></LetterBlock>
-            </div>
-          {/each}
-          <WordScore word={toString(word)}></WordScore>
-        </li>
-      {/each}
-    </ol>
-  </div>
+  <WordList></WordList>
 </div>
 
 <style>
   .score-box {
-    width: 80px;
-  }
-  .total-box {
-    width: 80px;
+    min-width: 80px;
+    height: 1.5em;
+    display: flex;
+    justify-content: start;
+  }  
+  .center {
+    margin-top: 36px;
   }
   @media screen and (width > 1000px) {
-  .center {
+  .center {    
     display: flex;
     justify-content: center;
     gap: 8px;
@@ -270,7 +256,11 @@
     height: 18px;
   }
 
+  /* Mobile */
   @media screen and (width < 800px) {
+    .score-box {
+      justify-content: center;
+    }
     :root {
       --block-width : 13vw;
       --block-height: 13vw;

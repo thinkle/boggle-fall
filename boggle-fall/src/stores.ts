@@ -1,68 +1,16 @@
-
 let lastIndex = 1;
 const rowSize = 5;
 const gridLength = rowSize ** 2;
-export let letterbank = "thequickbrownfoxjumpsoverthelazydog";
-// Gettysburg Address
-letterbank +=
-  "fourscoreandsevenyearsagoourfathersbroughtforthuponthiscontinent";
-letterbank +=
-  "conceivedinlibertyanddedicatedtothepropositionthatallmenarecreatedequal";
-// U.S. Constitution Preamble
-letterbank +=
-  "wethepeopleoftheunitedstatesinordertoformamoreperfectunionestablishjustice";
-letterbank +=
-  "insuredomestictranquilityprovideforthecommondefensepromotethegeneralwelfare";
-letterbank +=
-  "andsecuretheblessingsoflibertytoourselvesandourposterityordainandestablish";
-letterbank += "thisconstitutionfortheunitedstatesofamerica";
-// Hamlet
-letterbank +=
-  "tobeornottobethatisthequestionwhetheritistnoblerinthemindtosuffertheslingsandarrowsofoutrageousfortuneortotakearmsagainstaseaoftroublesandbyopposingendthem";
-// Nathaniel Hawthorne (The Scarlet Letter)
-letterbank += 'amanisassometimesmoreastupiditythantherestofustheywantedasitweretoswimthatimmortaltideitelltheeanwisdomthereisworthmorethanrubiestotherestinsignificantknowledgeismoreglitteringthangoldigetabetterviewsittingonaroot';
-// F. Scott Fitzgerald (The Great Gatsby)
-letterbank += 'sofarawayhecouldnotseethedimgiantstillingamoneypileattheendoftheirworldanhourlaterhewasinandoutofthedrivewaywithavariedloadandthenshethoughtofthewhiteclothsheworeattheplacewhereshehadfirstmetgatsby';
-// Exoplanet paragraph!
-letterbank += 'exoplanetsareplanetsoutsidethesolarsystemtheyorbitotherstarsandareoftenfoundinthehabitablezoneoftheirstarswhichmakethempotentialcandidatesforlifeexoplanetresearchhasrevolutionizedourunderstandingofthegalaxyandthechancesofextraterrestriallife';
-// Literature Anthology
-letterbank += 'greatliteraturefromacrossageshasshapedcultureandreflectsthespiritofhumanity';
-// Cooking Recipe Book
-letterbank += 'cookingscienceisdeliciouslearnaboutflavorprofilesandtechniquesforsavoryanddessertdishes';
-// Geography Atlas
-letterbank += 'theearthisdividedintosevencontinentsandfiveoceanswithavarietyoflandscapesandclimates';
-// Mathematics Workbook
-letterbank += 'mathisabroadfieldwithnumeroustheoremsandequationsusedtosolveproblemsinmanyareas';
-// Astronomy Guide
-letterbank += 'thestarsandplanetsintheuniverseholdmanysecretsaboutoursolarsystemandbeyond';
-// DIY Home Repair Manual
-letterbank += 'learnhowtomaintainandrepairyourhomefromplumbingtoelectricalworkandmore';
-// Art History Book
-letterbank += 'thedevelopmentofartthroughtheagesshowcasescreativityandexpressionofcultures';
-// Law Book
-letterbank += 'thelawisthebodyofrulesandregulationsthatgovernasocietyandensurejusticeforallofitsmembersitdefinesrightsandresponsibilities';
-// Sewing Guide
-letterbank += 'sewingisaskillthathasbeentransmittedfromgenerationto-generationwithtechniquesforcreatingclothingandotherfabricitems';
-// Minecraft Overview
-letterbank += 'minecraftisanopen-worldsandboxgamethatallowsplayerstobuild,explore,andcreativewithinavirtualworldmadeofblocks';
-// Word Games Description
-letterbank += 'wordgamesarefunandchallengingwaystotestandexpandyourvocabularytheycanbeplayedcasuallyorcompetitivelytoenhanceyourlanguage';
-// 3 letter words (200 words)
-letterbank += 'catdogpigfixhatacereflopgashamtinwigsackconhexkinmopvanjogzenbunpusnabwadpop...'
-// 4 letter words (200 words)
-letterbank += 'bendsendchatjumpwingflatclapdarkresttoadluckhopeveryraftfizzsnaplilyzoojew...';
-// 5 letter words (200 words)
-letterbank += 'bonusskirtrangedeckyarndarkoflameplumslimegazetechopewincedartsilkmeldsunkcris...';
-letterbank = letterbank.toLowerCase().replace(/\W/g,'');
 
 type Letter = {
   id : number,
   letter : string,
   selected?: boolean
 }
-
+import {letterbank} from './letterbank'
 import { get, writable } from "svelte/store";
 import type {Writable} from 'svelte/store';
+export {letterbank};
 
 export let words : Writable<Letter[][]> = writable([]);
 
@@ -83,14 +31,13 @@ export function replaceLetter (letter : Letter) {
       } else {
         // Otherwise, the letters above "fall" until we are
         // replacing the first row...
-        let prevIdx = idx - rowSize;
-        while (prevIdx > 0) {          
+        let prevIdx = idx - rowSize;        
+        while (prevIdx >= 0) {          
           $letters[idx] = $letters[prevIdx];
           idx = prevIdx;
           prevIdx = idx - rowSize;
         }
         $letters[idx] = makeNewLetter();
-
       }
 
       return $letters;
