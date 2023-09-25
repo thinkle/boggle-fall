@@ -1,6 +1,5 @@
 <script lang="ts">
   import { letterValues } from "../words";
-
   export let letter : string;
   export let selected : boolean
   let score : number = 0;
@@ -38,6 +37,7 @@
     filter: brightness(1.1)drop-shadow(2px 4px 6px black);
   }
   div.letter-block {
+    position: relative;
     user-select: none;
     box-sizing: border-box;
     width: var(--block-width,32px);
