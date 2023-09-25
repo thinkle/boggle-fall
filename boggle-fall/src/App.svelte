@@ -272,8 +272,9 @@
 
   @media screen and (width < 800px) {
     :root {
-      --block-width : 15vw;
-      --block-height: 15vw;
+      --block-width : 13vw;
+      --block-height: 13vw;
+      font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
     }
     .wrap {
       width: 100vw;
@@ -287,5 +288,9 @@
       justify-content: space-between;
       align-items: center;
     }
+  }
+
+  .total-box {
+    font-weight: bold;
   }
 </style>

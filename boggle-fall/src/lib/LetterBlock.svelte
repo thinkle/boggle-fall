@@ -20,7 +20,7 @@
   class:value9={score === 9}
   class:value10={score === 10}
   class:selected>
-  {letter}
+  {letter.toLocaleUpperCase()}
 </div>  
 
 <style>
