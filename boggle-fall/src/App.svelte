@@ -186,6 +186,9 @@
 </div>
 
 <style>
+  :root {
+    font-family:'Bild Variable Web',sans-serif;
+  }
   .score-box {
     min-width: 80px;
     height: 1.5em;
@@ -196,6 +199,10 @@
     margin-top: 36px;
   }
   @media screen and (width > 1000px) {
+    :root {
+      --block-width: calc(min(64px,12vw));
+      --block-height: var(--block-width);
+    }
   .center {    
     display: flex;
     justify-content: center;
@@ -233,7 +240,7 @@
     :root {
       --block-width : 13vw;
       --block-height: 13vw;
-      font-family:'Bild Variable Web',sans-serif;
+      
     }
     .wrap {
       width: 100vw;
