@@ -1,7 +1,6 @@
 <script lang="ts">
   import './assets/fonts.css'
   import TitleBar from './TitleBar.svelte';
-
   import WordList from './WordList.svelte';
   import WordScore from './WordScore.svelte';
   import EffectCanvas from './EffectCanvas.svelte';    
@@ -67,6 +66,17 @@
 
   let score = 0;
 
+  function getPageOffset (el : HTMLElement) {
+    let x = el.offsetLeft;
+    let y = el.offsetTop;
+    if (el.offsetParent) {
+      let parentOffset = getPageOffset(el.offsetParent);
+      x += parentOffset.x;
+      y += parentOffset.y;
+    }
+    return {x,y}
+  }
+
   function getTouchedLetter (e) {    
     for (let t of e.touches) {            
       let hovered = document.elementsFromPoint(t.pageX,t.pageY);
@@ -74,8 +84,19 @@
         for (let id in letterElements) {
           let el = letterElements[id];
           if (h==el) {            
-            let hoveredLetter = $letters.find((l)=>l.id==id);            
-            return hoveredLetter
+            let hoveredLetter = $letters.find((l)=>l.id==id);
+            // Ignore touch at the edge of hovered letter...
+            let w = el.clientWidth;
+            let h = el.clientHeight;
+            let {x,y} = getPageOffset(el);
+            let touchX = t.pageX;
+            let touchY = t.pageY;
+
+            // Check if we are in the center half of the letter...
+            if ((touchX > (x + 0.25*w)) &&
+                (touchX < (x + 0.75*w))) {
+              return hoveredLetter
+            }            
           }
         }
       }      
@@ -96,13 +117,7 @@
     } else if (letter == lastTouched) {
       return;
     } else {
-      console.log(
-        'New touch - already selected is',
-        $selected.map((l)=>l.letter),
-        '+',letter.letter,
-        'initialTouchTarget=',initialTouchTarget.letter,
-        'lastTouched=',lastTouched.letter
-      )
+      
       selectLetter(letter,true,false);
       lastTouched = letter;
       console.log(
