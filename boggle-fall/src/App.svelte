@@ -181,7 +181,7 @@
       
     </div>
   </div>
-  <div style="height:600px">
+  <div style="max-height:600px">
     Words:
     <ol>
       {#each $words as word, n}
@@ -208,12 +208,14 @@
   .total-box {
     width: 80px;
   }
+  @media screen and (width > 1000px) {
   .center {
     display: flex;
     justify-content: center;
     gap: 8px;
     align-items: center;
   }
+
   .wrap {
     width: 100vw;
     height: 100vh;
@@ -225,6 +227,7 @@
     place-content: center;  
     
   }
+}
   .target {
     width: 16px;
     height: 16px;    
@@ -265,5 +268,24 @@
     border: 1px solid pink;
     width: 18px;
     height: 18px;
+  }
+
+  @media screen and (width < 800px) {
+    :root {
+      --block-width : 15vw;
+      --block-height: 15vw;
+    }
+    .wrap {
+      width: 100vw;
+      height: 100vh;
+      position: fixed;
+      overflow: hidden;
+      top: 0;
+      left: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+    }
   }
 </style>
