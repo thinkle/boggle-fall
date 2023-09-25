@@ -1,4 +1,5 @@
 <script lang="ts">
+  import './assets/fonts.css'
   import TitleBar from './TitleBar.svelte';
 
   import WordList from './WordList.svelte';
@@ -232,7 +233,7 @@
     :root {
       --block-width : 13vw;
       --block-height: 13vw;
-      font-family:'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+      font-family:'Bild Variable Web',sans-serif;
     }
     .wrap {
       width: 100vw;

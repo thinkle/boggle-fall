@@ -25,6 +25,8 @@
     margin-inline-start: auto;
     margin-inline-end: auto;
     font-size: 28px;
+    font-weight: 300;
+    font-variation-settings: 'XHGT' 60;
   }  
 
 </style>

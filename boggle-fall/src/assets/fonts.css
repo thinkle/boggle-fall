@@ -1,0 +1,8 @@
+@font-face {
+    src: url('fonts/BildVariableV5[XHGT,wdth,wght].woff2') format("woff2"),
+         url('fonts/BildVariableV5[XHGT,wdth,wght].woff') format("woff");
+    font-family: 'Bild Variable Web';
+    font-style: normal;
+    font-weight: 100 900;
+    }
+

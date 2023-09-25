@@ -37,6 +37,7 @@
     display: grid;
     place-content: center;
     font-size: var(--block-font-size,24px);
+    font-weight: 500;
   }
 
   /* CSS Code */
