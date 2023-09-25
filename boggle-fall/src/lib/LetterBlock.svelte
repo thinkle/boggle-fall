@@ -53,13 +53,13 @@
 }
 
 .value3 {
-  background-color: #92e2f4; /* Light blue */
+  background-color: #9fced9; /* Light blue */
   border-color: #174e97;
   color: #333333;
 }
 
 .value4 {
-  background-color: #764118; /* Brown */
+  background-color: #1986e5; /* Blue */
   border-color: #FFA500;
   color: #FFFFFF;
 }

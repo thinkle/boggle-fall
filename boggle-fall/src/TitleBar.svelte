@@ -1,9 +1,10 @@
 <script lang="ts">
+  import Score from './Score.svelte';
   export let score : number;
 </script>  
 <div class="bar">
   <h1>Word-Fall</h1>
-  <div class="score">{score}</div>
+  <Score {score}></Score>
 </div>
 
 <style>
@@ -24,12 +25,7 @@
     margin-inline-start: auto;
     margin-inline-end: auto;
     font-size: 28px;
-  }
-  .score {
-    padding: 4px;
-    font-weight: bold;
-    font-size: 24px;
-  }
+  }  
 
 </style>
 
