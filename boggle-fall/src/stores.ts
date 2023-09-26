@@ -8,15 +8,62 @@ type Letter = {
   selected?: boolean
 }
 import {letterbank} from './letterbank'
-import { get, writable } from "svelte/store";
+import { derived, get, writable } from "svelte/store";
 import type {Writable} from 'svelte/store';
 export {letterbank};
 
 export let words : Writable<Letter[][]> = writable([]);
 
+let starterWords = [
+  "go",
+  "be",
+  "is",
+  "am", // 4
+  "are",
+  "were",
+  "sure",
+  "mad", // 8
+  "go",
+  "be",
+  "is",
+  "am", // 12
+  "are",
+  "were",
+  "sure",
+  "mad", // 16
+  "are",
+  "were",
+  "sure",
+  "mad", // 20
+  "are",
+  "were",
+  "sure",
+  "mad", // 24
+  "are",
+  "were",
+  "sure",
+  "mad", // 28
+  "you",
+  "we",
+  "us"
+];
+
+let wordObjs = [];
+for (let w of starterWords) {
+  let word = Array.from(w).map(
+    (l)=>{
+      let next = {letter:l,id:lastIndex,selected:false}
+      lastIndex++;
+      return next;
+    }
+  );
+  wordObjs.push(word);
+}
+words.set(wordObjs);
+
 export let letters : Writable<Letter[]> = writable([{ id: 0, letter: "A" }]);
 
-export function toString (letters : Letter[]) {
+export function toLetters (letters : Letter[]) {
   return letters.map((v)=>v.letter).join('');
 }
 
@@ -70,6 +117,11 @@ function makeNewLetter () {
   };
 }
 
+export function resetLetters () {
+  let newLetters = generateInitialLetters();
+  letters.set(newLetters);
+}
+
 function generateInitialLetters() {
   let letters = [];
   for (let i = 0; i < gridLength; i++) {
@@ -89,3 +141,35 @@ function getRandomLetter() {
 }
 
 export let selected : Writable<Letter[]> = writable([]);
+
+type GameHistory = {
+  words : string[];
+  score : number;
+  date : Date;
+}
+
+export let gameHistory : Writable<GameHistory[]> = writable([]);
+
+let existingHistory = localStorage.getItem('history');
+if (existingHistory) {
+  let history = JSON.parse(existingHistory);
+  gameHistory.set(history);
+}
+
+gameHistory.subscribe(
+  ($history)=>{
+    localStorage.setItem('history',JSON.stringify($history))
+  }
+);
+
+export let bestGame = derived([gameHistory],([$gameHistory])=>{
+  let highest: GameHistory | null = null;
+  for (let h of $gameHistory) {
+    if (!highest || h.score > highest.score) {
+      highest = h;
+    }
+  }
+  return highest
+})
+
+export let score = writable(0);

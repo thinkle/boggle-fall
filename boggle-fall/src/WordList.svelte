@@ -2,7 +2,7 @@
   import WordScore from './WordScore.svelte';  
   import LetterBlock from './lib/LetterBlock.svelte'
   import {send,receive} from './transition';
-  import {words, toString } from './stores';
+  import {words, toLetters } from './stores';
   import { flip } from 'svelte/animate';
   import { fly } from 'svelte/transition';      
 </script>
@@ -20,7 +20,7 @@
               <LetterBlock letter={letter.letter} selected={n==$words.length-1}></LetterBlock>
             </div>
           {/each}
-          <WordScore word={toString(word)}></WordScore>
+          <WordScore word={toLetters(word)}></WordScore>
         </li>
       {/each}
     </ol>
