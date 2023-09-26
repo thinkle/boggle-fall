@@ -23,12 +23,17 @@
 </div>
 
 <style>
-  
+
+
  div {  
+  --size : 22px;
+  --pad: 8px;
+  --badge: 16px;
+  font-size: var(--size);
   white-space: nowrap;
-  padding: 8px;
+  padding: var(--pad);
   border: 1px solid var(--score-color);
-  border-radius: 8px;
+  border-radius: var(--pad);
   align-self: center;
   justify-self: center;
   transform: rotate(var(--angle));
@@ -48,17 +53,31 @@
   .score-badge {
     position: absolute;
     transform: rotate(-17deg);
-    top: -18px;
-    right: -18px;
+    top: calc(-1*var(--badge));
+    right: calc(-1*var(--badge));
     border-radius: 50%;
-    width: 18px;
-    height: 18px;
-    font-size: 16px;
+    width:  calc(1.125*var(--badge,16px));
+    height: calc(1.125*var(--badge,16px));
+    font-size: var(--badge,16px);
     font-weight: bold;
     display: grid;
     place-content: center;
-    background-color: var(--score-color);
+    background-color: var(--score-color);    
+  }
 
+  @media screen and (width < 1000px) {
+    div {
+      --badge: 14px;
+      --size: 18px;
+      --pad: 4px;
+    }
+  }
+  @media screen and (width < 600px) {
+    div {
+      --badge: 12px;
+      --size: 16px;
+      --pad: 3px;
+    }
   }
 </style>
 
