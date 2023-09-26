@@ -78,12 +78,21 @@
     width: 28px;
   }
 
-  .info {
-    margin-top: 3em;
+  .info {    
     text-align: left;
     margin-left: auto;
-    margin-right: auto;
+    margin-right: auto;    
+    background-color: white;    
+    top: 32px;
+    left: 0;
+    width: 100%;
+    position: absolute;
+    z-index: 99;
+    padding: 2em;
+  }
+  .info p {
     max-width: 15em;
+    margin: auto;
   }
   h2 {
     text-align: center;
@@ -91,7 +100,7 @@
   }
 
   .info button {    
-    background-color: blue;
+    background-color: var(--theme-color,#0c8405);    
     color: white;
     padding: 8px;
     width: auto;
