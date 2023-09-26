@@ -32,8 +32,12 @@
 </div>
 {#if info}
   <div class="info" in:fly={{x:-300}} out:fade>
-    <h2>How many points can you rack up in thirty-one words?</h2>
-    <p>Swipe to make words. Longer words and
+    <h2>How many points
+      <br>can you rack up
+      <br>in just thirty-one words?
+    </h2>
+    <p>Swipe to make words by connecting adjacent letters.</p>
+    <p>Longer words and
     rarer letters get you more points.</p>
     <p>After you use letters, they fall into your word
       list and new letters fall into their place.
@@ -74,7 +78,19 @@
     width: 28px;
   }
 
-  .info button {
+  .info {
+    margin-top: 3em;
+    text-align: left;
+    margin-left: auto;
+    margin-right: auto;
+    max-width: 15em;
+  }
+  h2 {
+    text-align: center;
+    line-height: 1.1;
+  }
+
+  .info button {    
     background-color: blue;
     color: white;
     padding: 8px;
