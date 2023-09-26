@@ -13,7 +13,7 @@ import type {Writable} from 'svelte/store';
 export {letterbank};
 
 export let words : Writable<Letter[][]> = writable([]);
-
+/* 
 let starterWords = [
   "go",
   "be",
@@ -59,7 +59,7 @@ for (let w of starterWords) {
   );
   wordObjs.push(word);
 }
-words.set(wordObjs);
+words.set(wordObjs); */
 
 export let letters : Writable<Letter[]> = writable([{ id: 0, letter: "A" }]);
 
