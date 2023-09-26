@@ -6,6 +6,7 @@
   
   function resetGame () {
     $words = [];
+    $score = 0;
     resetLetters();
   }
 
@@ -26,13 +27,13 @@
   }
 
 </script>
-
+<div>
 <h1>You scored {$score}</h1>
 {#if $bestGame}<h2>Your high score is {$bestGame.score}</h2>{/if}
 <button on:click={resetGame}>Play again?</button>
 
 <WordTree min={1} max={31} {scores} {bestScore}></WordTree>
-
+</div>
 <style>
   .tree {
     display: grid;
