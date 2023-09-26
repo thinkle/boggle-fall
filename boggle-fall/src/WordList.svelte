@@ -28,10 +28,12 @@
 
 <style>
   div.words {
+    --block-width: calc(0.7*var(--block-width));
+    --block-height: var(--block-width);
     min-height: 200px;
     max-height: calc(100vh - var(--block-height)*6);
     overflow: scroll;
-    max-width: calc(100vw - var(--block-width));
+    max-width: calc(100vw - var(--block-width));    
   }
   
   li {
