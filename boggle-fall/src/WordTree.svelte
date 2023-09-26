@@ -1,5 +1,5 @@
 <script lang="ts">
-  debugger;
+
   import Leaf from './Leaf.svelte';
   export let min : number;
   export let max : number;
@@ -32,28 +32,36 @@
 
 <style>
   .tree {
-    display: grid;
+    /*display: grid;
     grid-template-areas:
       "parent parent"
       "child1 child2";      
+      */
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
   }
   .tree :global(*:nth-child(1)) {
     grid-area: parent;
     justify-self: center;
+    flex-basis: 80%;
   }
 
   .tree :global(*:nth-child(2) *) {
-    justify-self: end;
+    justify-self: end;    
   }
   .tree :global(*:nth-child(3) *) {
-    justify-self: start;
+    justify-self: start;    
   }
 
   .tree :global(*:nth-child(2)) {
-    grid-area: child1;    
+    grid-area: child1;  
+    flex-basis: 40%;  
   }
   .tree :global(*:nth-child(3)) {
     grid-area: child2;    
+    flex-basis: 40%;
   }
 </style>
 
