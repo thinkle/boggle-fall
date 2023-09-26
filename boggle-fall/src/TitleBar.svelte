@@ -86,10 +86,10 @@
   }
 
   .bit {
-    border: 3px solid white;
+    border: 2px solid white;
     border-radius: 50%;
-    width: 16px;
-    height: 16px;
+    width: 8px;
+    height: 8px;
     display: inline-block;
     transition: background-color 300ms;
   }
