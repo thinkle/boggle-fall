@@ -1,8 +1,6 @@
 <script lang="ts">
   import GameOver from './GameOver.svelte';
-
   import GameGrid from './GameGrid.svelte';
-
   import './assets/fonts.css'
   import TitleBar from './TitleBar.svelte';
   import WordList from './WordList.svelte';
@@ -10,19 +8,30 @@
   import EffectCanvas from './EffectCanvas.svelte';    
   import LetterBlock from './lib/LetterBlock.svelte'
   import {send,receive} from './transition';
-  import { selected, words, score, toLetters, gameHistory } from './stores';
+  import { selected, words, score, toLetters, gameHistory, timerDone, mode, startTime } from './stores';
   
   let gameOver = false;
-  $: if ($words.length == 31) {
+  function saveGame () {
     gameOver = true;
     $gameHistory = [
       ...$gameHistory,
       {
         words : $words.map(toLetters),
         score : $score,
-        date : new Date()
+        date : new Date(),
+        mode : $mode
       }
-    ]
+    ];
+    $selected = [];
+  }
+  
+  $: if (
+    ($mode=='Thirty-One Words' && $words.length == 31) || 
+    ($mode=='Fifteen Words' && $words.length==15)
+  ) {
+    saveGame();
+  } else if ($mode=='Two Minutes!' && $timerDone) {
+    saveGame();   
   } else {
     gameOver = false;
   }

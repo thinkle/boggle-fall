@@ -1,9 +1,17 @@
 <script lang="ts">
   import { fade, fly } from 'svelte/transition';  
   import Score from './Score.svelte';
-  import { words } from './stores';
+  import { words, mode } from './stores';
+  import Countdown from './Countdown.svelte';
+  
   export let score : number;
   let info = false;
+  let modes = [
+    'Thirty-One Words',
+    'Two Minutes!',
+    'Fifteen Words'
+  ];
+  
   
   let wordCount = 0;
   // little bits...
@@ -20,29 +28,49 @@
 </script>  
 <div class="bar">
   <button on:click={()=>info=!info}>?</button>
-  <h1>Thirty-One Words</h1>
-  <div class="horiz">
+  <select bind:value={$mode}>
+    {#each modes as m}
+      <option value={m}>{m}</option>
+    {/each}
+  </select>
+  <div class="horiz">    
+    {#if $mode=='Thirty-One Words'}
     <div class="bit" class:active={b16}></div>
-    <div class="bit" class:active={b8}></div>
-    <div class="bit" class:active={b4}></div>
-    <div class="bit" class:active={b2}></div>
-    <div class="bit" class:active={b1}></div>
+    {/if}
+    {#if $mode=='Thirty-One Words'||$mode=='Fifteen Words'}
+      <div class="bit" class:active={b8}></div>
+      <div class="bit" class:active={b4}></div>
+      <div class="bit" class:active={b2}></div>
+      <div class="bit" class:active={b1}></div>
+    {/if}
+    {#if $mode=='Two Minutes!'}
+      <Countdown/>
+    {/if}
     <Score {score}></Score>
   </div>
 </div>
 {#if info}
-  <div class="info" in:fly={{x:-300}} out:fade>
-    <h2>How many points
-      <br>can you rack up
-      <br>in just thirty-one words?
-    </h2>
-    <p>Swipe to make words by connecting adjacent letters.</p>
-    <p>Longer words and
-    rarer letters get you more points.</p>
-    <p>After you use letters, they fall into your word
-      list and new letters fall into their place.
-    </p>
-    <button on:click={()=>info=false}>Got it!</button>
+  <div class="info" in:fly={{x:-300}} out:fade>    
+      <h2>How many points
+        <br>can you rack up
+        <br>in just 
+        {#if $mode=='Thirty-One Words'}        
+          thirty-one words?
+        {:else if $mode=='Fifteen Words'}
+          fifteen words?
+        {:else if $mode=='Two Minutes!'}
+          two minutes?
+        {:else}
+          {$mode} ???
+        {/if}
+      </h2>
+      <p>Swipe to make words by connecting adjacent letters.</p>
+      <p>Longer words and
+      rarer letters get you more points.</p>
+      <p>After you use letters, they fall into your word
+        list and new letters fall into their place.
+      </p>
+      <button on:click={()=>info=false}>Got it!</button>            
   </div>
 {/if}
 
@@ -127,6 +155,16 @@
     display: flex;
     align-items: center;
     gap: 4px;
+  }
+
+  select {
+    border: none;
+    background-color: inherit;
+    color: inherit;
+    line-height: 1.2;
+    text-align: center;
+    font-size: 1.2rem;
+    font-weight: bold;
   }
 </style>
 

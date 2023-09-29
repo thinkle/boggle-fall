@@ -2,6 +2,9 @@ let lastIndex = 1;
 const rowSize = 5;
 const gridLength = rowSize ** 2;
 
+type Mode = "Thirty-One Words"|"Two Minutes!"| "Fifteen Words";
+export let mode: Writable<Mode> =
+  writable("Thirty-One Words");
 type Letter = {
   id : number,
   letter : string,
@@ -146,6 +149,7 @@ type GameHistory = {
   words : string[];
   score : number;
   date : Date;
+  mode : Mode
 }
 
 export let gameHistory : Writable<GameHistory[]> = writable([]);
@@ -153,6 +157,14 @@ export let gameHistory : Writable<GameHistory[]> = writable([]);
 let existingHistory = localStorage.getItem('history');
 if (existingHistory) {
   let history = JSON.parse(existingHistory);
+  history = history.map(
+    (h)=>{
+      if (!h.mode) {
+        h.mode = 'Thirty-One Words';
+      }
+      return h;
+    }
+  );
   gameHistory.set(history);
 }
 
@@ -164,12 +176,19 @@ gameHistory.subscribe(
 
 export let bestGame = derived([gameHistory],([$gameHistory])=>{
   let highest: GameHistory | null = null;
+  let $mode = get(mode);
   for (let h of $gameHistory) {
-    if (!highest || h.score > highest.score) {
-      highest = h;
+    if (h.mode==$mode) {
+      if (!highest || h.score > highest.score) {
+        highest = h;
+      }
     }
   }
   return highest
 })
 
 export let score = writable(0);
+
+export let startTime = writable(0);
+
+export let timerDone = writable(false);

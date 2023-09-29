@@ -3,46 +3,45 @@
   import EffectCanvas from './EffectCanvas.svelte';    
   import LetterBlock from './lib/LetterBlock.svelte'
   import {send,receive} from './transition';
-  import {letters, score, selected, areTouching, words, replaceLetter, toLetters } from './stores';
+  import {letters, score, selected, areTouching, words, replaceLetter, toLetters, startTime } from './stores';
   import { flip } from 'svelte/animate';
   import { fly } from 'svelte/transition';
   import { derived } from 'svelte/store';
   import { isWord, scoreWord } from './words';
   
+  
   let grid : HTMLDivElement;
 
-  function selectLetter (letter : {id:number,letter:string,selected?:boolean}, noOff=false, noCut=false) {            
-    //console.log('Select',letter,'(already have:',$selected,')')
+  function selectLetter (letter : {id:number,letter:string,selected?:boolean}, noOff=false, noCut=false) {                
     let last = $selected.at(-1);
     // If we are the last item, remove us...
     if (last==letter) {
       // Remove last item...
-      if (!noOff) {
-        //console.log("selectLetter=>REMOVE LAST");
+      if (!noOff) {        
         $selected.pop();
         $selected = $selected;   
       }
     } else if ($selected.indexOf(letter)==-1) {
       // Otherwise, if we aren't already in the list...
-      if (!last || areTouching(letter,last)) {
-        //console.log('Select letter ADD=>',letter)
+      if (!last || areTouching(letter,last)) {        
         $selected = [...$selected, letter];      
       }
     } else if (!noCut) {      
-      let idx = $selected.indexOf(letter);
-      //console.log('SELECT LETTER CUT OFF AT',idx,letter)
+      let idx = $selected.indexOf(letter);      
       $selected = $selected.slice(0,idx+1)
     }
     return true;
   }  
 
-  function resetSelected () {
-    console.log('RESET!',$selected)
+  function resetSelected () {    
     let word = $selected;
     let wordString = toLetters(word)
     if (word.length > 1 && isWord(wordString)) {  
       $score += scoreWord(wordString);
       $words = [...$words,word];
+      if (!$startTime) {
+        $startTime = new Date().getTime();
+      }
       for (let i=0; i<$selected.length; i++) {
         replaceLetter($selected[i]);
       }
@@ -114,20 +113,10 @@
     } else {
       
       selectLetter(letter,true,false);
-      lastTouched = letter;
-      console.log(
-        'Result: ',toLetters($selected)
-      );
+      lastTouched = letter;      
     }      
   }
   let changeIndex = 0;
-  selected.subscribe(
-    ($selected)=>{
-      console.log('Change',changeIndex,'=>',
-      toLetters($selected));
-      changeIndex++
-    }
-  )
 
   function onTouchEnd (e) {  
     e.preventDefault();   
