@@ -209,3 +209,5 @@ export let score = writable(0);
 export let startTime = writable(0);
 
 export let timerDone = writable(false);
+
+export let bestCurrentScore = writable(0);

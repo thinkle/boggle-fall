@@ -1,15 +1,17 @@
 <script lang="ts">
+  import Feedback from './Feedback.svelte';
+
   import './assets/fonts.css'
   import EffectCanvas from './EffectCanvas.svelte';    
   import LetterBlock from './lib/LetterBlock.svelte'
   import {send,receive} from './transition';
-  import {letters, score, selected, areTouching, words, replaceLetter, toLetters, startTime } from './stores';
+  import {letters, score, selected, areTouching, words, replaceLetter, toLetters, startTime, bestCurrentScore } from './stores';
   import { flip } from 'svelte/animate';
   import { fly } from 'svelte/transition';
   import { derived } from 'svelte/store';
   import { isWord, scoreWord } from './words';
   
-  
+
   let grid : HTMLDivElement;
 
   function selectLetter (letter : {id:number,letter:string,selected?:boolean}, noOff=false, noCut=false) {                
@@ -32,12 +34,20 @@
     }
     return true;
   }  
+  
+  let lastScoreGap = -1;
+  let lastScore = 0;
+  let lastWord = '';
 
   function resetSelected () {    
     let word = $selected;
     let wordString = toLetters(word)
     if (word.length > 1 && isWord(wordString)) {  
-      $score += scoreWord(wordString);
+      let points = scoreWord(wordString)  
+      lastScore = points;    
+      $score += points;
+      lastScoreGap = $bestCurrentScore - points;
+      lastWord = wordString;
       $words = [...$words,word];
       if (!$startTime) {
         $startTime = new Date().getTime();
@@ -133,14 +143,18 @@
   
 
 </script>
-
+<div class="feedback-holder">
+{#if lastScoreGap >= 0}
+  <Feedback word={lastWord} {lastScoreGap} score={lastScore}></Feedback>
+{/if}
+</div>
 <main bind:this={grid}
       on:click={resetSelected}
       on:touchstart={onTouchStart}
       on:touchend={onTouchEnd}
       on:touchmove={onTouchMove}
       on:mouseup={resetSelected}      
-    >
+    >      
       <EffectCanvas parent={grid} selectedElements={$selectedElements}/>
       {#each $letters as letter (letter.id)}
         <div animate:flip
@@ -169,10 +183,19 @@
           <LetterBlock 
             selected={$selected.indexOf(letter)>-1} letter={letter.letter} />
         </div>
-      {/each}
+      {/each}     
     </main>   
 
 <style>
+  .halo {
+    position: absolute;
+    right: -50px;
+    top: 10px;
+    width: 75px;
+    font-size: 10px;
+    z-index: 90;
+    pointer-events: none;
+  }
   :root {
     font-family:'Bild Variable Web',sans-serif;
   }
@@ -201,6 +224,12 @@
     z-index:2;
     justify-self: center;
     align-self: center;
+  }
+  .feedback-holder {
+    height: 2em;
+    display: flex;
+    justify-content: center;
+
   }
 </style>
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { areTouching, gameOver, letters } from "./stores";
+  import { areTouching, bestCurrentScore, gameOver, letters } from "./stores";
   import type {Letter} from './stores';
   import { isWord, findMatchingWords, scoreWord } from "./words";
   let words : string[] = [];
@@ -59,6 +59,10 @@
     for (let ltr of $letters) {      
       words = [...words,...findWordsStartingWith([ltr])];      
     }
+    let scores = words.map(scoreWord);
+    highest = Math.max(...scores);
+    $bestCurrentScore = highest;
+    hint = ''
   }
 
   $: findWords($letters);
@@ -73,7 +77,8 @@
   let allDone = false;
   let reallyDone = false;
   let highest : number;
-  let hint = ''
+  let hint = '';
+
   function getHint () {
     console.log('We have ',bigWords.length,bigWords)
     let scores = words.map(scoreWord);
@@ -90,6 +95,7 @@
 
   function doDoneReally () {
     allDone = false;
+    
     $gameOver = true;
   }
 </script>
@@ -102,7 +108,9 @@
     </div>
   {:else if allDone}
     <div class="pop-up">
-      <h2>Done?</h2>
+      <button class="close"
+      on:click={()=>allDone=false}>&times;</button>
+      <h2>Done Playing?</h2>
       <div>There are {words.length} words on this grid!</div>
       {#if bigWords.length}
         <div>And {bigWords.length} of them are 6 letters or longer!</div>
@@ -133,6 +141,16 @@
 </div>
 
 <style>
+  .close {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 1em;
+    height: 1em;
+    display: grid;
+    place-content: center;
+    border-radius: 50%;
+  }
   .pop-up > div {
     width: 100%;
   }
@@ -151,7 +169,7 @@
     z-index: 999;   
     display: flex;
     flex-direction: column;
-    justify-content: space-around;
+    justify-content: space-between;
     align-items: center; 
     text-align: left;
   }

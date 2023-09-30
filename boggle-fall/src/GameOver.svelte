@@ -39,6 +39,9 @@
   {/if}
 </div>
 <style>
+  div {
+    text-align: center;
+  }
   .tree {
     display: grid;
     grid-template-areas:
