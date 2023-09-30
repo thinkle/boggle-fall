@@ -41,75 +41,76 @@
     user-select: none;
     box-sizing: border-box;
     width: var(--block-width,32px);
-    height: var(--block-height,32px);
-    border: var(--block-border,3px solid #333);
+    height: var(--block-height,32px);    
     border-radius: var(--block-radius,8px);
     display: grid;
     place-content: center;
     font-size: var(--block-font-size,24px);
-    font-weight: 500;    
+    font-weight: 500;   
+    border-style: solid;
+    border-width: 1px; 
   }
 
   /* CSS Code */
-.value1 {
-  background-color: #F2F2F2; /* Light gray */
-  border-color: #D1D1D1;
-  color: #333333;
+
+  .value1 {
+  color: var(--v1-fg);
+  background-color: var(--v1-bg);
+  border-color: var(--v1-border);
 }
 
 .value2 {
-  background-color: #999999; /* gray */
-  border-color: #B0B0B0;
-  color: #333333;
+  color: var(--v2-fg);
+  background-color: var(--v2-bg);
+  border-color: var(--v2-border);
 }
 
 .value3 {
-  background-color: #9fced9; /* Light blue */
-  border-color: #174e97;
-  color: #333333;
+  color: var(--v3-fg);
+  background-color: var(--v3-bg);
+  border-color: var(--v3-border);
 }
 
 .value4 {
-  background-color: #1986e5; /* Blue */
-  border-color: #FFA500;
-  color: #FFFFFF;
+  color: var(--v4-fg);
+  background-color: var(--v4-bg);
+  border-color: var(--v4-border);
 }
 
 .value5 {
-  background-color: #FFA500; /* Orange */
-  border-color: #FF7F00;
-  color: #333333;
+  color: var(--v5-fg);
+  background-color: var(--v5-bg);
+  border-color: var(--v5-border);
 }
 
 .value6 {
-  background-color: #FF7F00; /* Darker Orange */
-  border-color: #FF6600;
-  color: #333333;
+  color: var(--v6-fg);
+  background-color: var(--v6-bg);
+  border-color: var(--v6-border);
 }
 
 .value7 {
-  background-color: #FF6347; /* Tomato */
-  border-color: #FF4500;
-  color: #FFFFFF;
+  color: var(--v7-fg);
+  background-color: var(--v7-bg);
+  border-color: var(--v7-border);
 }
 
 .value8 {
-  background-color: #FF4500; /* Darker Red-Orange */
-  border-color: #FF3300;
-  color: #FFFFFF;
+  color: var(--v8-fg);
+  background-color: var(--v8-bg);
+  border-color: var(--v8-border);
 }
 
 .value9 {
-  background-color: #FF0000; /* Red */
-  border-color: #CC0000;
-  color: #FFFFFF;
+  color: var(--v9-fg);
+  background-color: var(--v9-bg);
+  border-color: var(--v9-border);
 }
 
 .value10 {
-  background-color: #FFD700; /* Gold */
-  border-color: #FFA500;
-  color: #FFFFFF;
-  /* You can add additional styles here, such as shadow or animation for value 10 */
+  color: var(--v10-fg);
+  background-color: var(--v10-bg);
+  border-color: var(--v10-border);
 }
 
 </style>
