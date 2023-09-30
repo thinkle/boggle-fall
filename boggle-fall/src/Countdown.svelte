@@ -15,7 +15,7 @@
     let now = new Date().getTime();
     let elapsed = now - $startTime;
     let elapsedSeconds = Math.floor(elapsed / 1000);
-    let remainingSeconds = 20 - elapsedSeconds;
+    let remainingSeconds = 120 - elapsedSeconds;
     if (remainingSeconds < 0) {
       minutes = 0;
       seconds = 0;
