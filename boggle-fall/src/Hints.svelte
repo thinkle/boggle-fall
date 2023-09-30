@@ -59,9 +59,18 @@
     for (let ltr of $letters) {      
       words = [...words,...findWordsStartingWith([ltr])];      
     }
+    // Unique
+    words = words.filter(
+      (v,i)=>words.indexOf(v)==i
+    );
     let scores = words.map(scoreWord);
     highest = Math.max(...scores);
     $bestCurrentScore = highest;
+    /* console.log(
+      'Best word is worth',
+      highest,'=>',
+      words[scores.indexOf(highest)   ]
+      ) */
     hint = ''
   }
 
