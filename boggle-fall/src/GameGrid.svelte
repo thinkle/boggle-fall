@@ -110,8 +110,7 @@
       return;
     } else if (letter == lastTouched) {
       return;
-    } else {
-      
+    } else {      
       selectLetter(letter,true,false);
       lastTouched = letter;      
     }      
@@ -145,7 +144,7 @@
       <EffectCanvas parent={grid} selectedElements={$selectedElements}/>
       {#each $letters as letter (letter.id)}
         <div animate:flip
-          style="position:relative;z-index:2;"
+          class="letter-container"          
           bind:this={letterElements[letter.id]}
           in:fly|local={{y:-100,duration:1000}}
           out:send={{key:letter.id,duration:1000}}      
@@ -178,33 +177,30 @@
     font-family:'Bild Variable Web',sans-serif;
   }
   
-  @media screen and (width > 1000px) {
+  
     :root {
       --block-width: calc(min(64px,12vw));
       --block-height: var(--block-width);
     }
   
-}  
+ 
   main {
     margin: auto;
     user-select: none;    
     display: grid;
     gap: 8px;
-    grid-template-columns: auto auto auto auto auto;
+    justify-content: center;
+    align-items: center;
+    grid-template-columns: repeat(5,calc(1.25*var(--block-width)));
+    grid-template-rows: repeat(5,calc(1.25*var(--block-height)));
     position: relative;
-  }
-   
+  }    
 
-  /* Mobile */
-  @media screen and (width < 800px) {
-    
-    :root {
-      --block-width : 13vw;
-      --block-height: 13vw;
-      
-    }
-    
+  .letter-container {
+    position:relative;
+    z-index:2;
+    justify-self: center;
+    align-self: center;
   }
-
 </style>
 

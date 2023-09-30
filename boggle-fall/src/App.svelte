@@ -70,30 +70,7 @@
   .center {
     margin-top: 36px;
   }
-  @media screen and (width > 1000px) {
-    :root {
-      --block-width: calc(min(64px,12vw));
-      --block-height: var(--block-width);
-    }
-  .center {    
-    display: flex;
-    justify-content: center;
-    gap: 8px;
-    align-items: center;
-  }
-
-  .wrap {
-    width: 100vw;
-    height: 100vh;
-    position: fixed;
-    overflow: hidden;
-    top: 0;
-    left: 0;
-    display: grid;
-    place-content: center;  
-    
-  }
-}  
+  
   main {
     margin: auto;
     user-select: none;    
@@ -105,15 +82,10 @@
    
 
   /* Mobile */
-  @media screen and (width < 800px) {
+  
     .score-box {
       justify-content: center;
-    }
-    :root {
-      --block-width : 13vw;
-      --block-height: 13vw;
-      
-    }
+    }    
     .wrap {
       width: 100vw;
       height: 100vh;
@@ -126,6 +98,6 @@
       justify-content: space-between;
       align-items: center;
     }
-  }
+  
 
 </style>
