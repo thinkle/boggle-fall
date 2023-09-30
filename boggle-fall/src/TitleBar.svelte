@@ -1,21 +1,20 @@
 <script lang="ts">
   import { fade, fly } from 'svelte/transition';  
   import Score from './Score.svelte';
-  import { words, mode } from './stores';
+  import { words, mode, THIRTY1, FIFTEEN, TWO, INFINITE } from './stores';
   import Countdown from './Countdown.svelte';
+  import Hints from './Hints.svelte';
   
   export let score : number;
   let info = false;
   let modes = [
-    'Thirty-One Words',
-    'Two Minutes!',
-    'Fifteen Words'
+    THIRTY1, FIFTEEN, TWO, INFINITE
   ];
   
   
   let wordCount = 0;
   // little bits...
-  let b1,b2,b4,b8,b16;
+  let b1 : boolean,b2 : boolean,b4 : boolean,b8 : boolean,b16 : boolean;
   $: count = $words.length;
   $: {
     b1 = (count & 1) !== 0;
@@ -33,7 +32,9 @@
       <option value={m}>{m}</option>
     {/each}
   </select>
+  
   <div class="horiz">    
+    <Hints/>
     {#if $mode=='Thirty-One Words'}
     <div class="bit" class:active={b16}></div>
     {/if}
@@ -81,9 +82,7 @@
     justify-content: space-around;
     align-items: center;
     background-color: var(--theme-color,#0c8405);
-    color: var(--theme-bg,white);
-    position: fixed;
-    top: 0;
+    color: var(--theme-bg,white);        
     width: 100%;
   }
   h1 {

@@ -8,11 +8,12 @@
   import EffectCanvas from './EffectCanvas.svelte';    
   import LetterBlock from './lib/LetterBlock.svelte'
   import {send,receive} from './transition';
-  import { selected, words, score, toLetters, gameHistory, timerDone, mode, startTime } from './stores';
+  import { selected, words, score, toLetters, gameHistory, timerDone, mode, startTime, gameOver } from './stores';
   
-  let gameOver = false;
+
+  
   function saveGame () {
-    gameOver = true;
+    $gameOver = true;
     $gameHistory = [
       ...$gameHistory,
       {
@@ -24,25 +25,27 @@
     ];
     $selected = [];
   }
-  
+
   $: if (
     ($mode=='Thirty-One Words' && $words.length == 31) || 
     ($mode=='Fifteen Words' && $words.length==15)
   ) {
     saveGame();
+    $gameOver = true;
   } else if ($mode=='Two Minutes!' && $timerDone) {
     saveGame();   
-  } else {
-    gameOver = false;
-  }
+    $gameOver = true;
+  } else if ($gameOver) {
+    saveGame();
+  }  
   
 
 </script>
 <div class="wrap" 
 >  
-  <TitleBar score={$score}/>
+  <TitleBar score={$score}/>  
   <div class="center" on:click|stopPropagation>    
-    {#if !gameOver}
+    {#if !$gameOver}
       <GameGrid></GameGrid> 
     {:else}
       <GameOver></GameOver>

@@ -102,3 +102,20 @@ for (let i=1; i<25; i++) {
   word += 'i';
   console.log('Word of length',i,'multiplier=',getMultiplier(word))
 }
+
+let deadEnds = new Set();
+
+export function findMatchingWords (stem : string, wordlist=null) {
+  let ww = wordlist || words;
+  if (deadEnds.has(stem)) {
+    return null;
+  } else {
+    let matches = ww.filter((w)=>w.substring(0,stem.length)==stem)
+    if (matches.length==0) {
+      deadEnds.add(stem);
+      return null
+    } else {
+      return matches;
+    }
+  }
+}

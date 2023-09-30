@@ -2,10 +2,26 @@ let lastIndex = 1;
 const rowSize = 5;
 const gridLength = rowSize ** 2;
 
-type Mode = "Thirty-One Words"|"Two Minutes!"| "Fifteen Words";
-export let mode: Writable<Mode> =
-  writable("Thirty-One Words");
-type Letter = {
+export const INFINITE = "∞ Words";
+export const FIFTEEN = 'Fifteen Words';
+export const TWO = 'Two Minutes!';
+export const THIRTY1 = 'Thirty-One Words';
+
+type Mode = "Thirty-One Words" | "Two Minutes!" | "Fifteen Words" | "∞ Words";
+
+let defaultMode : Mode = 'Thirty-One Words';
+let localMode  = localStorage.getItem('mode');
+if (localMode && ![INFINITE,FIFTEEN,TWO,THIRTY1].includes(localMode)) {
+  defaultMode = localMode;
+}
+
+export let mode: Writable<Mode> = writable(defaultMode);
+mode.subscribe(
+  ($mode)=>localStorage.setItem('mode',$mode)
+);
+
+
+export type Letter = {
   id : number,
   letter : string,
   selected?: boolean
@@ -186,6 +202,7 @@ export let bestGame = derived([gameHistory],([$gameHistory])=>{
   }
   return highest
 })
+export let gameOver = writable(false);
 
 export let score = writable(0);
 
