@@ -72,7 +72,7 @@
 
   let allDone = false;
   let reallyDone = false;
-  let highest;
+  let highest : number;
   let hint = ''
   function getHint () {
     console.log('We have ',bigWords.length,bigWords)
