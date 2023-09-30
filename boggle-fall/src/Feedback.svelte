@@ -6,7 +6,7 @@
   $: percentage = score/(score+lastScoreGap);
 </script>
 
-{#key lastScoreGap}
+{#key word}
   <div class="halo" style:--percentage={percentage}>
     {#if lastScoreGap == 0}
       <div class="congrats">Best Word!</div>
