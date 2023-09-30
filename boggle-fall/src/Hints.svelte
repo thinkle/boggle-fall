@@ -127,8 +127,8 @@
         <button  on:click={getHint}>Show me a hint</button>
       {/if}
       <div style="display:flex;gap:32px">
-        <button on:click={doDoneReally}>Still done</button>
-        <button on:click={()=>{allDone=false}}>Nevermind</button>
+        <button on:click={doDoneReally}>End Game</button>
+        <button on:click={()=>{allDone=false}}>Keep Playing</button>
       </div>
     </div>
   {:else}
@@ -153,15 +153,18 @@
     width: 100%;
   }
   .pop-up {
+    --width: calc(min(400px,90vw));
     font-size: large;
     position: fixed;
     left: 50%;
     top: 50%;
-    margin-top: -200px;
-    margin-left: -200px;
+    box-sizing: border-box;
+    margin-top: calc(var(--width)/-2);
+    margin-left: calc(var(--width)/-2);
     padding: 42px;
-    width: 400px;
-    height: 400px;    
+    width: var(--width);
+    min-height: var(--width);    
+    gap: 8px;
     background-color: green;
     overflow: auto;
     z-index: 999;   
