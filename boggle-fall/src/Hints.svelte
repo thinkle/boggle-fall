@@ -1,7 +1,7 @@
 <script lang="ts">
   import { areTouching, gameOver, letters } from "./stores";
   import type {Letter} from './stores';
-  import { isWord, findMatchingWords } from "./words";
+  import { isWord, findMatchingWords, scoreWord } from "./words";
   let words : string[] = [];
 
   function findWordsStartingWith (ltrs : Letter[], wordlist=null) {
@@ -72,12 +72,21 @@
 
   let allDone = false;
   let reallyDone = false;
-  $: console.log(bigWords)
+  let highest;
   let hint = ''
   function getHint () {
+    console.log('We have ',bigWords.length,bigWords)
+    let scores = words.map(scoreWord);
+    highest = Math.max(...scores);
+    let highestWord = words[scores.indexOf(highest)]
+    console.log("best word:",highestWord);
+
     let idx = Math.floor(Math.random()*words.length);
     hint = words[idx]
   }
+
+  
+
 
   function doDoneReally () {
     allDone = false;
@@ -99,12 +108,19 @@
         <div>And {bigWords.length} of them are 6 letters or longer!</div>
       {/if}
       {#if hint}
-        For example, "{hint}"
-        <button on:click={()=>hint=''}>&times;</button>
+        <div
+          on:click={()=>hint=''}
+        >One such word is, "{hint}," worth {scoreWord(hint)} points.</div>
+        <div>
+          The highest-scoring word on the board is worth 
+          <b>{highest}</b> points.
+        </div>
+        
+        
       {:else}
-        <button on:click={getHint}>Show me a hint</button>
+        <button  on:click={getHint}>Show me a hint</button>
       {/if}
-      <div>
+      <div style="display:flex;gap:32px">
         <button on:click={doDoneReally}>Still done</button>
         <button on:click={()=>{allDone=false}}>Nevermind</button>
       </div>
@@ -117,21 +133,27 @@
 </div>
 
 <style>
+  .pop-up > div {
+    width: 100%;
+  }
   .pop-up {
+    font-size: large;
     position: fixed;
     left: 50%;
     top: 50%;
     margin-top: -200px;
     margin-left: -200px;
+    padding: 42px;
     width: 400px;
     height: 400px;    
-    background-color: #111a;
+    background-color: green;
     overflow: auto;
     z-index: 999;   
     display: flex;
     flex-direction: column;
     justify-content: space-around;
     align-items: center; 
+    text-align: left;
   }
   .small {
     font-size: small;
