@@ -79,13 +79,10 @@
   let highest : number;
   let hint = '';
 
-  function getHint () {
-    console.log('We have ',bigWords.length,bigWords)
+  function getHint () {    
     let scores = words.map(scoreWord);
     highest = Math.max(...scores);
-    let highestWord = words[scores.indexOf(highest)]
-    console.log("best word:",highestWord);
-
+    let highestWord = words[scores.indexOf(highest)]    
     let idx = Math.floor(Math.random()*words.length);
     hint = words[idx]
   }
@@ -118,7 +115,8 @@
       {#if hint}
         <div
           on:click={()=>hint=''}
-        >One such word is, "{hint}," worth {scoreWord(hint)} points.</div>
+        >One word is {hint.length} letters long, starts with 
+        a  "{hint[0]}," and is worth {scoreWord(hint)} points.</div>
         <div>
           The highest-scoring word on the board is worth 
           <b>{highest}</b> points.
