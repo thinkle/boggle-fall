@@ -206,6 +206,9 @@
         keyboardPatterns = [];        
       }
     }
+    if (e.key == 'Escape') {
+      keyboardPatterns = [];
+    }
     if (e.key == 'Return' || e.key=='Enter') {
       finishWord();
     }
