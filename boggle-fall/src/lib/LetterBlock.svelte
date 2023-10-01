@@ -32,6 +32,7 @@
     right: 4px;
     font-size: x-small;
     font-weight: 300;
+    text-shadow: none;
   }
   .selected {
     filter: brightness(1.1)drop-shadow(2px 4px 6px black);
@@ -86,31 +87,43 @@
 .value6 {
   color: var(--v6-fg);
   background-color: var(--v6-bg);
-  border-color: var(--v6-border);
+  border-color: var(--v6-border); 
+  --border: var(--v6-border); 
 }
 
 .value7 {
   color: var(--v7-fg);
   background-color: var(--v7-bg);
   border-color: var(--v7-border);
+  --border: var(--v7-border);
 }
 
 .value8 {
   color: var(--v8-fg);
   background-color: var(--v8-bg);
   border-color: var(--v8-border);
+  --border: var(--v8-border);
 }
 
 .value9 {
   color: var(--v9-fg);
   background-color: var(--v9-bg);
   border-color: var(--v9-border);
+  --border: var(--v9-border);
 }
 
 .value10 {
   color: var(--v10-fg);
   background-color: var(--v10-bg);
   border-color: var(--v10-border);
+  --border: var(--v10-border);
 }
+
+.value6,.value7,.value8,.value9,.value10 {
+  text-shadow : 
+    2px 2px var(--border);
+  
+}
+
 
 </style>

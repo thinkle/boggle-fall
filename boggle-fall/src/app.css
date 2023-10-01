@@ -114,10 +114,10 @@ button:hover {
   --v3-border: #026F79;
 
   /* Value 4 */
-  --v4-bg: #2c8743;
+  --v4-bg: #f3c1c1;
   /* Blue */
-  --v4-fg: var(--white);
-  --v4-border: #b5f8fe;
+  --v4-fg: var(--off-black);
+  --v4-border: var(--off-black);
 
   
   /* Value 5 */
@@ -126,10 +126,10 @@ button:hover {
   --v5-border: #6D0D0D;
 
   /* Value 6 */
-  --v6-bg: #FAD89E;
+  --v6-bg: #face82;
   /* Orange */
   --v6-fg: var(--off-black);
-  --v6-border: #f72C25;
+  --v6-border: rgba(244, 235, 214, 0.646);
 
   /* Value 7 */
   --v7-bg: var(--vg-bg);
@@ -138,9 +138,9 @@ button:hover {
   --v7-border: var(--vg-border);
   
   /* Value 8 */
-  --v8-bg: #F9BA4E;
-  --v8-fg: #140D01;
-  --v8-border: #B27306;  
+  --v8-bg: #f1a625;
+  --v8-fg: white;
+  --v8-border: #B2730633;  
 
   /* Value 9 */
   --v9-bg: var(--v9-bg);
@@ -151,5 +151,5 @@ button:hover {
   /* Value 10 */
   --v10-bg: #F72C25;
   --v10-fg: #FFF0EB;
-  --v10-border: #280a00;
+  --v10-border: #280a0077;
 }
