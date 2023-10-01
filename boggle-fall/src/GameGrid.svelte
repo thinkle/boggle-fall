@@ -14,6 +14,9 @@
 
   let grid : HTMLDivElement;
 
+  /* Return true if selection changes,
+  false if it is unchanged...
+  */
   function selectLetter (letter : {id:number,letter:string,selected?:boolean}, noOff=false, noCut=false) {                
     let last = $selected.at(-1);
     // If we are the last item, remove us...
@@ -22,24 +25,26 @@
       if (!noOff) {        
         $selected.pop();
         $selected = $selected;   
+        return true;
       }
     } else if ($selected.indexOf(letter)==-1) {
       // Otherwise, if we aren't already in the list...
       if (!last || areTouching(letter,last)) {        
         $selected = [...$selected, letter];      
+        return true;
       }
     } else if (!noCut) {      
       let idx = $selected.indexOf(letter);      
       $selected = $selected.slice(0,idx+1)
-    }
-    return true;
+      return true;
+    } 
   }  
   
   let lastScoreGap = -1;
   let lastScore = 0;
   let lastWord = '';
 
-  function resetSelected () {    
+  function finishWord () {    
     let word = $selected;
     let wordString = toLetters(word)
     if (word.length > 1 && isWord(wordString)) {  
@@ -116,6 +121,7 @@
     if (!letter) {      
       return
     }
+    clickMode = false;
     if (letter == initialTouchTarget) {      
       return;
     } else if (letter == lastTouched) {
@@ -129,7 +135,7 @@
 
   function onTouchEnd (e) {  
     e.preventDefault();   
-    resetSelected()
+    finishWord()
   }
 
   function onTouchStart (e) {    
@@ -141,32 +147,50 @@
     }
   }
   
+  let clickMode = false;
+
+  function maybeFinishWord () {
+    if ($selected && !clickMode) {
+      finishWord()
+    }
+  }
+
+  function clickSelectLetter (letter ) {
+    clickMode = true;
+    selectLetter(letter);
+  }
 
 </script>
+<svelte:window on:mouseup={maybeFinishWord}/>
+
 <div class="feedback-holder">
 {#if lastScoreGap >= 0}
   <Feedback word={lastWord} {lastScoreGap} score={lastScore}></Feedback>
 {/if}
 </div>
-<main bind:this={grid}
-      on:click={resetSelected}
+<main bind:this={grid}      
       on:touchstart={onTouchStart}
       on:touchend={onTouchEnd}
       on:touchmove={onTouchMove}
-      on:mouseup={resetSelected}      
+      on:click={finishWord}
     >      
       <EffectCanvas parent={grid} selectedElements={$selectedElements}/>
       {#each $letters as letter (letter.id)}
         <div animate:flip
+          tabindex="0"
           class="letter-container"          
           bind:this={letterElements[letter.id]}
           in:fly|local={{y:-100,duration:1000}}
           out:send={{key:letter.id,duration:1000}}      
           style:position="relative"             
-          on:click={()=>selectLetter(letter,true)}           
+          on:click|stopPropagation={()=>clickSelectLetter(letter)}           
           on:mousemove={(e)=>{            
-            if (e.buttons) {              
-              selectLetter(letter,true)
+            if (e.buttons) {
+              let changed = selectLetter(letter,true);
+              if (changed) {
+                clickMode = false;
+              }
+              
             }
           }}                   
         >
