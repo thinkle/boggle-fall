@@ -132,21 +132,20 @@ button:hover {
   --v6-border: rgba(244, 235, 214, 0.646);
 
   /* Value 7 */
-  --v7-bg: var(--vg-bg);
-  /* Tomato */
-  --v7-fg: var(--vg-fg);
-  --v7-border: var(--vg-border);
-  
-  /* Value 8 */
-  --v8-bg: #f1a625;
-  --v8-fg: white;
-  --v8-border: #B2730633;  
+    --v7-bg: #f5b74c;
+    --v7-fg: white;
+    --v7-border: #B2730633;
 
+  /* Value 8 */
+  --v8-bg:#f1a625;
+  --v8-fg: rgb(253, 254, 192);
+  --v8-border: var(--off-black);
+  
   /* Value 9 */
-  --v9-bg: var(--v9-bg);
+  --v9-bg: var(--v8-bg);
   /* Darker Red-Orange */
-  --v9-fg: var(--v9-fg);
-  --v9-border: var(--v9-border);
+  --v9-fg: var(--v8-fg);
+  --v9-border: #F72C25;
 
   /* Value 10 */
   --v10-bg: #F72C25;
