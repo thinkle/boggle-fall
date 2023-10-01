@@ -25,7 +25,7 @@
   }
 
 </script>  
-<div class="bar">
+<div class="bar" on:mouseup|stopPropagation on:click|stopPropagation on:keydown|stopPropagation>
   <button on:click={()=>info=!info}>?</button>
   <select bind:value={$mode}>
     {#each modes as m}
