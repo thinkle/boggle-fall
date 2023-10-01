@@ -6,7 +6,7 @@
   import { flip } from 'svelte/animate';
   import { fly } from 'svelte/transition';      
 </script>
-
+<div></div> <!-- Placeholder for flex centering when we absolute-position words -->
 <div class="words">
     <hr>
     <ol>
@@ -50,6 +50,15 @@
     flex-direction: column-reverse;
     gap: 8px;
     padding: 0;
+  }
+
+  @media screen and (width > 1028px) {
+    .words {
+      position: absolute;
+      right: 16px;
+      top: 48px;
+      height: calc(100vh - 48px);
+    }
   }
 
 </style>
