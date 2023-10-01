@@ -11,7 +11,7 @@ type Mode = "Thirty-One Words" | "Two Minutes!" | "Fifteen Words" | "∞ Words";
 
 let defaultMode : Mode = 'Thirty-One Words';
 let localMode  = localStorage.getItem('mode');
-if (localMode && ![INFINITE,FIFTEEN,TWO,THIRTY1].includes(localMode)) {
+if (localMode && [INFINITE,FIFTEEN,TWO,THIRTY1].includes(localMode)) {
   defaultMode = localMode;
 }
 
