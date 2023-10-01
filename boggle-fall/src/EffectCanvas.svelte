@@ -42,7 +42,7 @@
     }
   }
 
-  function doDrawing() {
+  function doDrawing(force1,force2) {
     if (ctx) {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       ctx.lineWidth = 4;
@@ -50,8 +50,7 @@
       drawConnections(selectedElements);
       ctx.lineWidth = 1;
       ctx.strokeStyle = '#aaa'
-      for (let pattern of secondaryPatterns) {
-        debugger;
+      for (let pattern of secondaryPatterns) {        
         drawConnections(pattern);
       }
     }
