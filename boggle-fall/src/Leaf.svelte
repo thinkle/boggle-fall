@@ -8,24 +8,28 @@
   let jauntyAngle = `${Math.random() * 10 - 5}deg`
 
 </script>
-
-<div style:--angle={jauntyAngle}  
-  class:good={scores[word]>15}
-  class:great={scores[word]>30}
-  class:best={scores[word]==bestScore}
->
-  {word.toLocaleUpperCase()}
-  {#if scores[word]==bestScore || scores[word]>15}
-  <div class="score-badge">
-    {scores[word]}
+<div class="word-wrap">
+  <div style:--angle={jauntyAngle}  
+    class="word"
+    class:good={scores[word]>15}
+    class:great={scores[word]>30}
+    class:best={scores[word]==bestScore}
+  >
+    {word.toLocaleUpperCase()}
+    {#if scores[word]==bestScore || scores[word]>15}
+    <div class="score-badge">
+      {scores[word]}
+    </div>
+    {/if}
   </div>
-  {/if}
 </div>
-
 <style>
 
-
- div {  
+.word-wrap {
+  display: grid;
+  place-content: center;
+}  
+ .word {  
   --size : 22px;
   --pad: 8px;
   --badge: 16px;
