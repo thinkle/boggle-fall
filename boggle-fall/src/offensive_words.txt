@@ -1,0 +1,13 @@
+fuck(ing|ed|er)?$
+shit(ting|ted|ty|s)?$
+cunts?$
+^niggers?$
+niggas?$
+kikes?$
+dagos?$
+fag(got)?(s|y|ty)?$
+^dykes?$
+^cocksuckers?$
+^assholes?$
+^dickheads?$
+^twat$
