@@ -1,6 +1,7 @@
 fuck(ing|ed|er)?$
 shit(ting|ted|ty|s)?$
 cunts?$
+^abbr$
 ^niggers?$
 niggas?$
 kikes?$
