@@ -1,7 +1,7 @@
 Custom wordlist generated from http://app.aspell.net/create using SCOWL
 with parameters:
   diacritic: strip
-  max_size: 80
+  max_size: 70
   max_variant: 2
   special: <none>
   spelling: US GBs GBz CA AU
