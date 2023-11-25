@@ -1,57 +1,63 @@
 <script lang="ts">
-  import GameOver from './GameOver.svelte';
-  import GameGrid from './GameGrid.svelte';
-  import './assets/fonts.css'
-  import TitleBar from './TitleBar.svelte';
-  import WordList from './WordList.svelte';
-  import WordScore from './WordScore.svelte';
-  import EffectCanvas from './EffectCanvas.svelte';    
-  import LetterBlock from './lib/LetterBlock.svelte'
-  import {send,receive} from './transition';
-  import { selected, words, score, toLetters, gameHistory, timerDone, mode, startTime, gameOver } from './stores';
-  
+  import GameOver from "./GameOver.svelte";
+  import GameGrid from "./GameGrid.svelte";
+  import "./assets/fonts.css";
+  import TitleBar from "./TitleBar.svelte";
+  import WordList from "./WordList.svelte";
+  import WordScore from "./WordScore.svelte";
+  import EffectCanvas from "./EffectCanvas.svelte";
+  import LetterBlock from "./lib/LetterBlock.svelte";
+  import { send, receive } from "./transition";
+  import {
+    selected,
+    words,
+    score,
+    toLetters,
+    gameHistory,
+    timerDone,
+    mode,
+    startTime,
+    gameOver,
+  } from "./stores";
 
-  
-  function saveGame () {
+  function saveGame() {
     $gameOver = true;
     $gameHistory = [
       ...$gameHistory,
       {
-        words : $words.map(toLetters),
-        score : $score,
-        date : new Date(),
-        mode : $mode
-      }
+        words: $words.map(toLetters),
+        score: $score,
+        date: new Date(),
+        mode: $mode,
+      },
     ];
     $selected = [];
   }
 
   $: if (
-    ($mode=='Thirty-One Words' && $words.length == 31) || 
-    ($mode=='Fifteen Words' && $words.length==15)
+    ($mode == "Thirty-One Words" && $words.length == 31) ||
+    ($mode == "Fifteen Words" && $words.length == 15)
   ) {
     saveGame();
     $gameOver = true;
-  } else if ($mode=='Two Minutes!' && $timerDone) {
-    saveGame();   
+  } else if ($mode == "Two Minutes!" && $timerDone) {
+    saveGame();
     $gameOver = true;
   } else if ($gameOver) {
     saveGame();
-  }  
-  
-
+  }
 </script>
-<div class="wrap" 
->  
-  <TitleBar score={$score}/>  
-  <div class="center" on:click|stopPropagation>    
+
+<div class="wrap">
+  <TitleBar score={$score} />
+  <div class="center" on:click|stopPropagation>
     {#if !$gameOver}
-      <GameGrid></GameGrid> 
+      <GameGrid autoFinishMode={$mode == "Two Minutes!"}></GameGrid>
     {:else}
       <GameOver></GameOver>
     {/if}
     <div class="score-box">
-      <WordScore interactive={true} word={toLetters($selected)}/>      
+      <WordScore interactive={true} word={toLetters($selected)} />
     </div>
   </div>
   <WordList></WordList>
@@ -59,45 +65,42 @@
 
 <style>
   :root {
-    font-family:'Bild Variable Web',sans-serif;
+    font-family: "Bild Variable Web", sans-serif;
   }
   .score-box {
     min-width: 80px;
     height: 1.5em;
     display: flex;
     justify-content: start;
-  }  
+  }
   .center {
     margin-top: 36px;
   }
-  
+
   main {
     margin: auto;
-    user-select: none;    
+    user-select: none;
     display: grid;
     gap: 8px;
     grid-template-columns: auto auto auto auto auto;
     position: relative;
   }
-   
 
   /* Mobile */
-  
-    .score-box {
-      justify-content: center;
-    }    
-    .wrap {
-      width: 100vw;
-      height: 100vh;
-      position: fixed;
-      overflow: hidden;
-      top: 0;
-      left: 0;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      align-items: center;
-    }
-  
 
+  .score-box {
+    justify-content: center;
+  }
+  .wrap {
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    overflow: hidden;
+    top: 0;
+    left: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+  }
 </style>

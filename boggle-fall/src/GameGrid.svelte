@@ -1,6 +1,6 @@
 <script lang="ts">
   import Feedback from "./Feedback.svelte";
-  import type {Letter} from './stores';
+  import type { Letter } from "./stores";
   import "./assets/fonts.css";
   import EffectCanvas from "./EffectCanvas.svelte";
   import LetterBlock from "./lib/LetterBlock.svelte";
@@ -24,7 +24,6 @@
 
   let grid: HTMLDivElement;
 
-  
   /* Select code for mouse/touch */
   function selectLetter(
     letter: { id: number; letter: string; selected?: boolean },
@@ -59,30 +58,47 @@
   let lastScoreGap = -1;
   let lastScore = 0;
   let lastWord = "";
+  export let autoFinishMode = false;
+  let readyToFinish = false;
 
   function finishWord() {
     let word = $selected;
     let wordString = toLetters(word);
     if (word.length > 1 && isWord(wordString)) {
-      let points = scoreWord(wordString);
-      lastScore = points;
-      $score += points;
-      lastScoreGap = $bestCurrentScore - points;
-      lastWord = wordString;
-      $words = [...$words, word];
-      if (!$startTime) {
-        $startTime = new Date().getTime();
-      }
-      for (let i = 0; i < $selected.length; i++) {
-        replaceLetter($selected[i]);
+      if (autoFinishMode) {
+        doFinishWord();
+      } else {
+        readyToFinish = true;
       }
     } else {
       $selected.forEach((l) => (l.selected = false));
+      resetInput();
     }
+  }
+
+  function doFinishWord() {
+    let wordString = toLetters($selected);
+    let points = scoreWord(wordString);
+    lastScore = points;
+    $score += points;
+    lastScoreGap = $bestCurrentScore - points;
+    lastWord = wordString;
+    $words = [...$words, $selected];
+    if (!$startTime) {
+      $startTime = new Date().getTime();
+    }
+    for (let i = 0; i < $selected.length; i++) {
+      replaceLetter($selected[i]);
+    }
+    resetInput();
+  }
+
+  function resetInput() {
     keyboardPatterns = [];
     keyboardSelected = [];
     patternIndex = 0;
     $selected = [];
+    readyToFinish = false;
   }
 
   let letterElements: {
@@ -92,11 +108,10 @@
   let selectedElements = derived([selected], ([$selected]) =>
     $selected.map((letter) => letterElements[letter.id])
   );
-  let secondaryPatterns : HTMLDivElement[][] = [];
-  $: secondaryPatterns = keyboardPatterns.map(
-    (pattern)=>pattern.map((letter)=>letterElements[letter.id])
+  let secondaryPatterns: HTMLDivElement[][] = [];
+  $: secondaryPatterns = keyboardPatterns.map((pattern) =>
+    pattern.map((letter) => letterElements[letter.id])
   );
-
 
   function getTouchedLetter(e) {
     for (let t of e.touches) {
@@ -172,71 +187,73 @@
     selectLetter(letter);
   }
 
-  let keyboardPatterns : Letter[][] = [];  
-  let keyboardSelected : Letter[] = [];
+  let keyboardPatterns: Letter[][] = [];
+  let keyboardSelected: Letter[] = [];
   let patternIndex = 0;
-  function addLetterToPattern (pattern : Letter[], letter : Letter) {
+  function addLetterToPattern(pattern: Letter[], letter: Letter) {
     let lastLetter = pattern.at(-1);
     if (!lastLetter) {
-      throw new Error("addLetterToPattern with empty pattern???")      
+      throw new Error("addLetterToPattern with empty pattern???");
     }
     // Already in our word? Stop!
     if (pattern.indexOf(letter) > -1) {
-      return
+      return;
     }
     // Not touching, not a thing
-    if (!areTouching(lastLetter,letter)) {
-      return
+    if (!areTouching(lastLetter, letter)) {
+      return;
     }
     // Wait -- we *are* a thing and we *are* touching!
-    return [...pattern,letter]    
+    return [...pattern, letter];
   }
 
-  function handleKeyboardInput (e : KeyboardEvent) {
-    console.log('KBD:',e.key);
+  function handleKeyboardInput(e: KeyboardEvent) {
+    console.log("KBD:", e.key);
     /* Typing can match any number of patterns... */
-    if (e.key=='Backspace') {
-      console.log('Erase!')
+    if (e.key == "Backspace") {
+      console.log("Erase!");
       for (let p of keyboardPatterns) {
-        p.pop();        
+        p.pop();
       }
-      if (keyboardPatterns.length && keyboardPatterns[0].length==0) {
+      if (keyboardPatterns.length && keyboardPatterns[0].length == 0) {
         // If we are empty, empty our pattern list.
-        console.log('Reset!');
-        keyboardPatterns = [];        
+        console.log("Reset!");
+        keyboardPatterns = [];
       }
     }
-    if (e.key == 'Escape') {
+    if (e.key == "Escape") {
       keyboardPatterns = [];
     }
-    if (e.key == 'Return' || e.key=='Enter') {
+    if (e.key == "Return" || e.key == "Enter") {
       finishWord();
     }
-    if (e.key == 'Tab' || e.key=='ArrowRight') {
+    if (e.key == "Tab" || e.key == "ArrowRight") {
       if (keyboardPatterns.length > 1) {
-        patternIndex++
+        patternIndex++;
         e.preventDefault();
       }
     }
-    if (e.key == 'ArrowLeft') {
-      patternIndex--
+    if (e.key == "ArrowLeft") {
+      patternIndex--;
     }
     if (e.key.match(/^[A-Za-z]$/)) {
       let letterString = e.key.toLowerCase();
-      console.log('Letter!',letterString);
+      console.log("Letter!", letterString);
       // Get all letter blocks that match...
-      let matchingLetters = $letters.filter((ltr)=>ltr.letter==letterString);
-      if (matchingLetters.length==0) {
-        console.log('No letter',letterString);
-        return
+      let matchingLetters = $letters.filter(
+        (ltr) => ltr.letter == letterString
+      );
+      if (matchingLetters.length == 0) {
+        console.log("No letter", letterString);
+        return;
       }
       if (keyboardPatterns.length == 0) {
         // When we start, we find all matching letters
         // in our grid and each letter starts a potential
         // pattern
-        console.log('Starting fresh!');
+        console.log("Starting fresh!");
         for (let ltr of matchingLetters) {
-          keyboardPatterns.push([ltr])
+          keyboardPatterns.push([ltr]);
         }
       } else {
         // Otherwise, we are trying to add our matchingLetters
@@ -244,17 +261,17 @@
         let newPatterns = [];
         for (let pattern of keyboardPatterns) {
           for (let letter of matchingLetters) {
-            let resultingPattern = addLetterToPattern(pattern,letter);
+            let resultingPattern = addLetterToPattern(pattern, letter);
             if (resultingPattern) {
               newPatterns.push(resultingPattern);
             }
           }
         }
-        keyboardPatterns = newPatterns;        
+        keyboardPatterns = newPatterns;
       }
     }
     // Loop through all the letters we have selected
-    // and push them    
+    // and push them
     keyboardSelected = [];
     for (let pattern of keyboardPatterns) {
       for (let l of pattern) {
@@ -266,15 +283,10 @@
     // Make svelte see the change!
     keyboardSelected = keyboardSelected;
     $selected = keyboardPatterns[patternIndex % keyboardPatterns.length] || [];
-
   }
-
 </script>
 
-<svelte:window 
-  on:mouseup={maybeFinishWord} 
-  on:keydown={handleKeyboardInput}
-  />
+<svelte:window on:mouseup={maybeFinishWord} on:keydown={handleKeyboardInput} />
 
 <div class="feedback-holder">
   {#if lastScoreGap >= 0}
@@ -288,8 +300,10 @@
   on:touchmove={onTouchMove}
   on:click={finishWord}
 >
-  <EffectCanvas parent={grid} selectedElements={$selectedElements} 
-    secondaryPatterns={secondaryPatterns}
+  <EffectCanvas
+    parent={grid}
+    selectedElements={$selectedElements}
+    {secondaryPatterns}
   />
   {#each $letters as letter (letter.id)}
     <div
@@ -321,16 +335,45 @@
           >
           </div> -->
       <LetterBlock
-        
-        selected={$selected.includes(letter)
-        || keyboardSelected.includes(letter)}
+        selected={$selected.includes(letter) ||
+          keyboardSelected.includes(letter)}
         letter={letter.letter}
       />
     </div>
   {/each}
 </main>
+{#if readyToFinish && !autoFinishMode}
+  <div class="submit-holder">
+    <button class="add-button" on:click={doFinishWord}> + </button>
+  </div>
+{/if}
 
 <style>
+  .add-button {
+    width: 2em;
+    height: 2em;
+    border-radius: 50%;
+    border: none;
+    display: grid;
+    place-content: center;
+    background-color: rgb(216, 0, 83);
+    color: white;
+    font-weight: bold;
+    box-shadow: 4px 4px #777a;
+  }
+  .add-button:hover {
+    filter: brightness(1.1);
+  }
+  .add-button:active {
+    filter: brightness(1.2);
+    transform: translate(2px, 2px);
+    box-shadow: 2px 2px #777a;
+  }
+  .submit-holder {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+  }
   .halo {
     position: absolute;
     right: -50px;
