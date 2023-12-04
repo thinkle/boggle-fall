@@ -61,11 +61,11 @@
   export let autoFinishMode = false;
   let readyToFinish = false;
 
-  function finishWord() {
+  function finishWord(force = false) {
     let word = $selected;
     let wordString = toLetters(word);
     if (word.length > 1 && isWord(wordString)) {
-      if (autoFinishMode) {
+      if (autoFinishMode || force) {
         doFinishWord();
       } else {
         readyToFinish = true;
@@ -225,7 +225,7 @@
       keyboardPatterns = [];
     }
     if (e.key == "Return" || e.key == "Enter") {
-      finishWord();
+      finishWord(true);
     }
     if (e.key == "Tab" || e.key == "ArrowRight") {
       if (keyboardPatterns.length > 1) {
