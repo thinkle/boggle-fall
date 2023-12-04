@@ -13,8 +13,8 @@ export function isWord(word: string) {
 export let letterValues: { [key: string]: number } = {};
 let letterCount = 0;
 let frequencies: { [key: string]: number } = {};
-for (let word of wordList) {
-  for (let letter of word.replace(/[^A-Za-z]/g,'')) {
+for (let word of wordList.split("\n")) {
+  for (let letter of word.replace(/[^A-Za-z]/g, "")) {
     letterCount++;
     if (!frequencies[letter]) {
       frequencies[letter] = 1;
