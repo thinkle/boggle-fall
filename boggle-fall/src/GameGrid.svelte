@@ -286,7 +286,10 @@
   }
 </script>
 
-<svelte:window on:mouseup={maybeFinishWord} on:keydown={handleKeyboardInput} />
+<svelte:window
+  on:mouseup={() => maybeFinishWord()}
+  on:keydown={handleKeyboardInput}
+/>
 
 <div class="feedback-holder">
   {#if lastScoreGap >= 0}
@@ -298,7 +301,7 @@
   on:touchstart={onTouchStart}
   on:touchend={onTouchEnd}
   on:touchmove={onTouchMove}
-  on:click={finishWord}
+  on:click={() => finishWord()}
 >
   <EffectCanvas
     parent={grid}
