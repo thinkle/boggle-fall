@@ -1,10 +1,9 @@
 <script lang="ts">
   import { areTouching, bestCurrentScore, gameOver, letters } from "./stores";
   import type { Letter } from "./stores";
-  import { selected, letterTrees } from "./stores";
-  import { isWord, findMatchingWords, scoreWord } from "./words";
+  import { letterTrees } from "./stores";
+  import { findMatchingWords, scoreWord } from "./words";
   import { TreeNode } from "./trees";
-  import HintTree from "./HintTree2D.svelte";
   let words: string[] = [];
 
   $letterTrees = new Map<Letter, TreeNode>();
@@ -103,12 +102,12 @@
       nodes.push(node);
     }
 
-    console.log(
+    /* console.log(
       "!!!Best word is worth",
       highest,
       "=>",
       words[scores.indexOf(highest)]
-    );
+    ); */
     hint = "";
   }
 
@@ -139,10 +138,10 @@
 
     $gameOver = true;
   }
-  $: {
+  /* $: {
     console.log("Words:", words);
     console.log("Big words:", bigWords);
-  }
+  } */
 </script>
 
 <div>

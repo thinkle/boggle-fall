@@ -8,7 +8,7 @@ const WIGGLE = 60; // random wiggle of initial branches...
 const BRANCH_SPREAD = 60; // degrees
 const INACTIVE_COLOR = "#44774023";
 const ACTIVE_COLOR = "#007730";
-const INACTIVE_FLOWER = "#ffff8f20";
+const INACTIVE_FLOWER = "#ff88aa20";
 const ACTIVE_FLOWER = "#ff4488";
 
 function drawFlower(
