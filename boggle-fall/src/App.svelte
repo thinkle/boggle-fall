@@ -10,6 +10,7 @@
   import { send, receive } from "./transition";
   import {
     selected,
+    letterTrees,
     words,
     score,
     toLetters,
@@ -19,6 +20,7 @@
     startTime,
     gameOver,
   } from "./stores";
+  import HintTree2D from "./HintTree2D.svelte";
 
   function saveGame() {
     $gameOver = true;
@@ -53,6 +55,10 @@
   <div class="center" on:click|stopPropagation>
     {#if !$gameOver}
       <GameGrid autoFinishMode={$mode == "Two Minutes!"}></GameGrid>
+      <HintTree2D
+        stems={Array.from($letterTrees.values())}
+        selectedLetters={$selected}
+      />
     {:else}
       <GameOver></GameOver>
     {/if}

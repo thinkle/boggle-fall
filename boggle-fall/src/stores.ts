@@ -3,35 +3,33 @@ const rowSize = 5;
 const gridLength = rowSize ** 2;
 
 export const INFINITE = "∞ Words";
-export const FIFTEEN = 'Fifteen Words';
-export const TWO = 'Two Minutes!';
-export const THIRTY1 = 'Thirty-One Words';
+export const FIFTEEN = "Fifteen Words";
+export const TWO = "Two Minutes!";
+export const THIRTY1 = "Thirty-One Words";
 
 type Mode = "Thirty-One Words" | "Two Minutes!" | "Fifteen Words" | "∞ Words";
 
-let defaultMode : Mode = 'Thirty-One Words';
-let localMode  = localStorage.getItem('mode');
-if (localMode && [INFINITE,FIFTEEN,TWO,THIRTY1].includes(localMode)) {
+let defaultMode: Mode = "Thirty-One Words";
+let localMode = localStorage.getItem("mode");
+if (localMode && [INFINITE, FIFTEEN, TWO, THIRTY1].includes(localMode)) {
   defaultMode = localMode;
 }
 
 export let mode: Writable<Mode> = writable(defaultMode);
-mode.subscribe(
-  ($mode)=>localStorage.setItem('mode',$mode)
-);
-
+mode.subscribe(($mode) => localStorage.setItem("mode", $mode));
 
 export type Letter = {
-  id : number,
-  letter : string,
-  selected?: boolean
-}
-import {letterbank} from './letterbank'
+  id: number;
+  letter: string;
+  selected?: boolean;
+};
+import { letterbank } from "./letterbank";
 import { derived, get, writable } from "svelte/store";
-import type {Writable} from 'svelte/store';
-export {letterbank};
+import type { Writable } from "svelte/store";
+import { TreeNode } from "./trees";
+export { letterbank };
 
-export let words : Writable<Letter[][]> = writable([]);
+export let words: Writable<Letter[][]> = writable([]);
 /* 
 let starterWords = [
   "go",
@@ -80,39 +78,37 @@ for (let w of starterWords) {
 }
 words.set(wordObjs); */
 
-export let letters : Writable<Letter[]> = writable([{ id: 0, letter: "A" }]);
+export let letters: Writable<Letter[]> = writable([{ id: 0, letter: "A" }]);
 
-export function toLetters (letters : Letter[]) {
-  return letters.map((v)=>v.letter).join('');
+export function toLetters(letters: Letter[]) {
+  return letters.map((v) => v.letter).join("");
 }
 
-export function replaceLetter (letter : Letter) {
-  letters.update(
-    ($letters) => {      
-      let idx = $letters.indexOf(letter);
-      let row = Math.floor(idx/rowSize);      
-      if (row == 0) {
-        // If we're in the first row, just replace with new letter
-        $letters[idx] = makeNewLetter();
-      } else {
-        // Otherwise, the letters above "fall" until we are
-        // replacing the first row...
-        let prevIdx = idx - rowSize;        
-        while (prevIdx >= 0) {          
-          $letters[idx] = $letters[prevIdx];
-          idx = prevIdx;
-          prevIdx = idx - rowSize;
-        }
-        $letters[idx] = makeNewLetter();
+export function replaceLetter(letter: Letter) {
+  letters.update(($letters) => {
+    let idx = $letters.indexOf(letter);
+    let row = Math.floor(idx / rowSize);
+    if (row == 0) {
+      // If we're in the first row, just replace with new letter
+      $letters[idx] = makeNewLetter();
+    } else {
+      // Otherwise, the letters above "fall" until we are
+      // replacing the first row...
+      let prevIdx = idx - rowSize;
+      while (prevIdx >= 0) {
+        $letters[idx] = $letters[prevIdx];
+        idx = prevIdx;
+        prevIdx = idx - rowSize;
       }
-
-      return $letters;
+      $letters[idx] = makeNewLetter();
     }
-  )
+
+    return $letters;
+  });
 }
 
-export function areTouching (a : Letter,b : Letter) {
-  let $letters = get(letters)
+export function areTouching(a: Letter, b: Letter) {
+  let $letters = get(letters);
   let idxA = $letters.indexOf(a);
   let idxB = $letters.indexOf(b);
   let rowA = Math.floor(idxA / rowSize);
@@ -128,15 +124,15 @@ export function areTouching (a : Letter,b : Letter) {
 
 letters.set(generateInitialLetters());
 
-function makeNewLetter () {
-  lastIndex++
+function makeNewLetter() {
+  lastIndex++;
   return {
     letter: getRandomLetter(),
     id: lastIndex,
   };
 }
 
-export function resetLetters () {
+export function resetLetters() {
   let newLetters = generateInitialLetters();
   letters.set(newLetters);
 }
@@ -150,58 +146,50 @@ function generateInitialLetters() {
   return letters;
 }
 
-
-
-
-
-function getRandomLetter() {  
+function getRandomLetter() {
   let index = Math.floor(Math.random() * letterbank.length);
   return letterbank[index];
 }
 
-export let selected : Writable<Letter[]> = writable([]);
+export let selected: Writable<Letter[]> = writable([]);
 
 type GameHistory = {
-  words : string[];
-  score : number;
-  date : Date;
-  mode : Mode
-}
+  words: string[];
+  score: number;
+  date: Date;
+  mode: Mode;
+};
 
-export let gameHistory : Writable<GameHistory[]> = writable([]);
+export let gameHistory: Writable<GameHistory[]> = writable([]);
 
-let existingHistory = localStorage.getItem('history');
+let existingHistory = localStorage.getItem("history");
 if (existingHistory) {
   let history = JSON.parse(existingHistory);
-  history = history.map(
-    (h)=>{
-      if (!h.mode) {
-        h.mode = 'Thirty-One Words';
-      }
-      return h;
+  history = history.map((h) => {
+    if (!h.mode) {
+      h.mode = "Thirty-One Words";
     }
-  );
+    return h;
+  });
   gameHistory.set(history);
 }
 
-gameHistory.subscribe(
-  ($history)=>{
-    localStorage.setItem('history',JSON.stringify($history))
-  }
-);
+gameHistory.subscribe(($history) => {
+  localStorage.setItem("history", JSON.stringify($history));
+});
 
-export let bestGame = derived([gameHistory],([$gameHistory])=>{
+export let bestGame = derived([gameHistory], ([$gameHistory]) => {
   let highest: GameHistory | null = null;
   let $mode = get(mode);
   for (let h of $gameHistory) {
-    if (h.mode==$mode) {
+    if (h.mode == $mode) {
       if (!highest || h.score > highest.score) {
         highest = h;
       }
     }
   }
-  return highest
-})
+  return highest;
+});
 export let gameOver = writable(false);
 
 export let score = writable(0);
@@ -211,3 +199,5 @@ export let startTime = writable(0);
 export let timerDone = writable(false);
 
 export let bestCurrentScore = writable(0);
+
+export let letterTrees = writable<Map<Letter, TreeNode>>(new Map());
