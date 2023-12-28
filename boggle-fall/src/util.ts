@@ -8,3 +8,19 @@ export function getPageOffset(el: HTMLElement) {
   }
   return { x, y };
 }
+
+let shortenings: { [key: string]: string } = {
+  Fifteen: "15",
+  "Thirty-One": "31",
+  Two: "2",
+  Seven: "7",
+  " Regular": "",
+  "No Hints": "-",
+  " Easy": "",
+};
+export function shorten(s: string) {
+  for (let key in shortenings) {
+    s = s.replace(key, shortenings[key]);
+  }
+  return s;
+}

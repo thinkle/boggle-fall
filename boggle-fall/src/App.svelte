@@ -19,6 +19,7 @@
     mode,
     startTime,
     gameOver,
+    hintMode,
   } from "./stores";
   import HintTree2D from "./HintTree2D.svelte";
 
@@ -38,7 +39,8 @@
 
   $: if (
     ($mode == "Thirty-One Words" && $words.length == 31) ||
-    ($mode == "Fifteen Words" && $words.length == 15)
+    ($mode == "Fifteen Words" && $words.length == 15) ||
+    ($mode == "Seven Words" && $words.length == 7)
   ) {
     saveGame();
     $gameOver = true;
@@ -55,10 +57,12 @@
   <div class="center" on:click|stopPropagation>
     {#if !$gameOver}
       <GameGrid autoFinishMode={$mode == "Two Minutes!"}></GameGrid>
-      <HintTree2D
-        stems={Array.from($letterTrees.values())}
-        selectedLetters={$selected}
-      />
+      {#if $hintMode != "none"}
+        <HintTree2D
+          stems={Array.from($letterTrees.values())}
+          selectedLetters={$selected}
+        />
+      {/if}
     {:else}
       <GameOver></GameOver>
     {/if}

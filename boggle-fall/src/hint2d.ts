@@ -1,5 +1,6 @@
 import type { TreeNode } from "./trees";
-import { selected, type Letter } from "./stores";
+import { hintMode, type Letter } from "./stores";
+import { get } from "svelte/store";
 
 const W = 1200;
 const H = 1200;
@@ -107,11 +108,22 @@ function buildBranch(
   maybeSelected: boolean
 ) {
   let selected = maybeSelected;
+  let $hintMode = get(hintMode);
   if (maybeSelected) {
-    if (selectedLetters.length >= depth) {
-      // If we are definitely selected
-      // (i.e. up to our depth is selected and only that, then good!)
-      selected = true;
+    if ($hintMode == "none") {
+      selected = false;
+    }
+    // If there are more letters selected than our depth...
+    if ($hintMode == "complete") {
+      if (selectedLetters.length > depth) {
+        // If we are definitely selected
+        // (i.e. up to our depth is selected and only that, then good!)
+        selected = true;
+      } else {
+        selected = false;
+      }
+    } else if ($hintMode == "stems") {
+      selected = maybeSelected;
     }
   }
 
@@ -162,13 +174,16 @@ function buildBranch(
     }
   }
   if (stem.isCompleteWord && stem.score) {
-    drawFlower(
-      ctx,
-      ex,
-      ey,
-      stem.score,
-      selected && selectedLetters.length <= depth + 1
-    );
+    let flowerSelected = false;
+    if ($hintMode == "complete") {
+      // So in complete mode, we need to have selected ALL the
+      // letters -- so e.g. if we're at depth 2 (starting at 0)
+      // it will be 3 letters selected...
+      flowerSelected = selected && selectedLetters.length == depth + 1;
+    } else if ($hintMode == "stems") {
+      flowerSelected = selected && selectedLetters.length <= depth + 1;
+    }
+    drawFlower(ctx, ex, ey, stem.score, flowerSelected);
   }
 }
 

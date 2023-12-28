@@ -1,20 +1,28 @@
 <script lang="ts">
-  import { fade, fly } from 'svelte/transition';  
-  import Score from './Score.svelte';
-  import { words, mode, THIRTY1, FIFTEEN, TWO, INFINITE } from './stores';
-  import Countdown from './Countdown.svelte';
-  import Hints from './Hints.svelte';
+  import { fade, fly } from "svelte/transition";
+  import Score from "./Score.svelte";
   
-  export let score : number;
+  import {
+    words,
+    mode,
+    THIRTY1,
+    FIFTEEN,
+    TWO,
+    INFINITE,
+    SEVEN,
+    hintModes,
+    hintMode,
+  } from "./stores";
+  import Countdown from "./Countdown.svelte";
+  import Hints from "./Hints.svelte";
+  import {shorten} from './util';
+  export let score: number;
   let info = false;
-  let modes = [
-    THIRTY1, FIFTEEN, TWO, INFINITE
-  ];
-  
-  
+  let modes = [THIRTY1, FIFTEEN, SEVEN, TWO, INFINITE];
+
   let wordCount = 0;
   // little bits...
-  let b1 : boolean,b2 : boolean,b4 : boolean,b8 : boolean,b16 : boolean;
+  let b1: boolean, b2: boolean, b4: boolean, b8: boolean, b16: boolean;
   $: count = $words.length;
   $: {
     b1 = (count & 1) !== 0;
@@ -23,66 +31,89 @@
     b8 = (count & 8) !== 0;
     b16 = (count & 16) !== 0;
   }
+  let innerWidth = 0;
 
-</script>  
-<div class="bar" on:mouseup|stopPropagation on:click|stopPropagation on:keydown|stopPropagation>
-  <button on:click={()=>info=!info}>?</button>
+  function maybeShorten (word: string, innerWidth: number) {
+    console.log('Shorten?',word,innerWidth)
+    if (innerWidth < 600) {
+      return shorten(word, 8);
+    } else {
+      return word;
+    }
+  }
+</script>
+
+<div
+  class="bar"
+  bind:clientWidth={innerWidth}
+  on:mouseup|stopPropagation
+  on:click|stopPropagation
+  on:keydown|stopPropagation
+>
+  <button on:click={() => (info = !info)}>?</button>
   <select bind:value={$mode}>
     {#each modes as m}
-      <option value={m}>{m}</option>
+      <option value={m}>{maybeShorten(m,innerWidth)}</option>
     {/each}
-  </select>
-  
+  </select>  
   <div class="horiz">    
-    <Hints/>
-    {#if $mode=='Thirty-One Words'}
-    <div class="bit" class:active={b16}></div>
+    <select bind:value={$hintMode}>
+      {#each hintModes as m}
+        <option value={m.value}>{maybeShorten(m.label,innerWidth)}</option>
+      {/each}
+    </select>
+    <Hints />
+    {#if $mode == THIRTY1}
+      <div class="bit" class:active={b16}></div>
     {/if}
-    {#if $mode=='Thirty-One Words'||$mode=='Fifteen Words'}
+    {#if $mode == THIRTY1 || $mode == FIFTEEN}
       <div class="bit" class:active={b8}></div>
+    {/if}
+    {#if $mode == THIRTY1 || $mode == FIFTEEN || $mode == SEVEN}
       <div class="bit" class:active={b4}></div>
       <div class="bit" class:active={b2}></div>
       <div class="bit" class:active={b1}></div>
     {/if}
-    {#if $mode=='Two Minutes!'}
-      <Countdown/>
+    {#if $mode == "Two Minutes!"}
+      <Countdown />
     {/if}
     <Score {score}></Score>
   </div>
 </div>
 {#if info}
-  <div class="info" in:fly={{x:-300}} out:fade>    
-      <h2>How many points
-        <br>can you rack up
-        <br>in just 
-        {#if $mode=='Thirty-One Words'}        
-          thirty-one words?
-        {:else if $mode=='Fifteen Words'}
-          fifteen words?
-        {:else if $mode=='Two Minutes!'}
-          two minutes?
-        {:else}
-          {$mode} ???
-        {/if}
-      </h2>
-      <p>Swipe to make words by connecting adjacent letters.</p>
-      <p>Longer words and
-      rarer letters get you more points.</p>
-      <p>After you use letters, they fall into your word
-        list and new letters fall into their place.
-      </p>
-      <button on:click={()=>info=false}>Got it!</button>            
+  <div class="info" in:fly={{ x: -300 }} out:fade>
+    <h2>
+      How many points
+      <br />can you rack up
+      <br />in just
+      {#if $mode == "Thirty-One Words"}
+        thirty-one words?
+      {:else if $mode == "Fifteen Words"}
+        fifteen words?
+      {:else if $mode == "Two Minutes!"}
+        two minutes?
+      {:else}
+        {$mode} ???
+      {/if}
+    </h2>
+    <p>Swipe to make words by connecting adjacent letters.</p>
+    <p>Longer words and rarer letters get you more points.</p>
+    <p>
+      After you use letters, they fall into your word list and new letters fall
+      into their place.
+    </p>
+    <button on:click={() => (info = false)}>Got it!</button>
   </div>
 {/if}
 
 <style>
   .bar {
-    height: 32px;    
+    height: 32px;
     display: flex;
     justify-content: space-around;
     align-items: center;
-    background-color: var(--theme-color,#0c8405);
-    color: var(--theme-bg,white);        
+    background-color: var(--theme-color, #0c8405);
+    color: var(--theme-bg, white);
     width: 100%;
   }
   h1 {
@@ -92,8 +123,8 @@
     margin-inline-end: auto;
     font-size: 28px;
     font-weight: 300;
-    font-variation-settings: 'XHGT' 60;
-  }  
+    font-variation-settings: "XHGT" 60;
+  }
 
   button {
     background: transparent;
@@ -105,11 +136,11 @@
     width: 28px;
   }
 
-  .info {    
+  .info {
     text-align: left;
     margin-left: auto;
-    margin-right: auto;    
-    background-color: white;    
+    margin-right: auto;
+    background-color: white;
     top: 32px;
     left: 0;
     width: 100%;
@@ -126,8 +157,8 @@
     line-height: 1.1;
   }
 
-  .info button {    
-    background-color: var(--theme-color,#0c8405);    
+  .info button {
+    background-color: var(--theme-color, #0c8405);
     color: white;
     padding: 8px;
     width: auto;
@@ -165,5 +196,5 @@
     font-size: 1.2rem;
     font-weight: bold;
   }
+ 
 </style>
-

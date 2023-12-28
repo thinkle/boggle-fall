@@ -3,11 +3,17 @@ const rowSize = 5;
 const gridLength = rowSize ** 2;
 
 export const INFINITE = "∞ Words";
+export const SEVEN = "Seven Words";
 export const FIFTEEN = "Fifteen Words";
 export const TWO = "Two Minutes!";
 export const THIRTY1 = "Thirty-One Words";
 
-type Mode = "Thirty-One Words" | "Two Minutes!" | "Fifteen Words" | "∞ Words";
+type Mode =
+  | "Thirty-One Words"
+  | "Two Minutes!"
+  | "Fifteen Words"
+  | "Seven Words"
+  | "∞ Words";
 
 let defaultMode: Mode = "Thirty-One Words";
 let localMode = localStorage.getItem("mode");
@@ -201,3 +207,12 @@ export let timerDone = writable(false);
 export let bestCurrentScore = writable(0);
 
 export let letterTrees = writable<Map<Letter, TreeNode>>(new Map());
+
+export type HintMode = "complete" | "stems" | "none";
+export const hintModes: { value: HintMode; label: string }[] = [
+  { value: "complete", label: "🌸 Regular" },
+  { value: "stems", label: "🌸🌸 Easy" },
+  { value: "none", label: "No Hints" },
+];
+
+export let hintMode = writable<HintMode>("complete");
