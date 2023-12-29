@@ -376,16 +376,10 @@
     display: flex;
     width: 100%;
     justify-content: center;
+    position: relative;
+    z-index: 100;
   }
-  .halo {
-    position: absolute;
-    right: -50px;
-    top: 10px;
-    width: 75px;
-    font-size: 10px;
-    z-index: 90;
-    pointer-events: none;
-  }
+  
   :root {
     font-family: "Bild Variable Web", sans-serif;
   }

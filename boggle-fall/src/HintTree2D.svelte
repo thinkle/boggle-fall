@@ -39,18 +39,21 @@
   <canvas bind:this={canvas}></canvas>
 </div>
 
-<style>
-  .canvas-container,
+<style>  
   .canvas-container canvas {
-    width: min(calc(100vw - 64px), 300px);
-    height: min(calc(100vw - 64px), 300px);
+    --size: min(calc(100vw - 64px), 500px);
+    width: var(--size);
+    height: var(--size);
     position: fixed;
-    bottom: 0px;
-    left: 32px;
-    background-color: transparent;
+    bottom: 0; /*calc(-0.05 * var(--size));*/
+    left: 0; /*calc(-0.3333 * var(--size));*/
+    /* transform: rotate(45deg);
+    transform-origin: bottom;
+     */background-color: transparent;
     display: grid;
     place-content: end center;
     pointer-events: none;
-    z-index: 99;
+    z-index: -1;
+    filter: drop-shadow(-4px 8px 8px rgba(212, 212, 212, 0.5))
   }
 </style>
