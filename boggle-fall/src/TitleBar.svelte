@@ -102,6 +102,14 @@
       After you use letters, they fall into your word list and new letters fall
       into their place.
     </p>
+    <h2>Hints</h2>
+    <p>
+      The bouquet of flowers is a map of all the words available on the board.
+      The bigger the flower, the higher scoring the word. The longer the stem,
+      the longer the word.</p>
+    <p>In regular hint mode, you'll see your word highlighted in the bouquet.</p>
+    <p>In easy hint mode, you'll see all the words you can make with the letters
+      you've selected highlighted in the bouquet.</p>
     <button on:click={() => (info = false)}>Got it!</button>
   </div>
 {/if}
@@ -144,6 +152,9 @@
     top: 32px;
     left: 0;
     width: 100%;
+    box-sizing: border-box;
+    max-height: calc(100vh - 32px);
+    overflow-y: auto;
     position: absolute;
     z-index: 99;
     padding: 2em;
@@ -151,6 +162,8 @@
   .info p {
     max-width: 15em;
     margin: auto;
+    line-height: 1.4;
+    margin-bottom: 1em;
   }
   h2 {
     text-align: center;
