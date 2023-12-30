@@ -5,7 +5,7 @@ import { get } from "svelte/store";
 const W = 1200;
 const H = 1200;
 const UP = -50;
-const PAD = 20;
+const PAD = 60;
 const WIGGLE = 60; // random wiggle of initial branches...
 const BRANCH_SPREAD = 60; // degrees
 const INACTIVE_COLOR = "#9db49c"; // Lighter shade of green
@@ -75,16 +75,17 @@ type CurveCache = {
 };
 
 // Create a cache object
-const curveCache: Record<string, CurveCache> = {};
+let curveCache: Record<string, CurveCache> = {};
 
 type DrawnNode = {
   x: number;
   y: number;
   size: number;
 };
-const drawnNodes: DrawnNode[] = [];
+let drawnNodes: DrawnNode[] = [];
+
 function isInBounds(x, y) {
-  return x > 0 && x < W && y > 0 && y < H;
+  return x > PAD && x < W - PAD && y > PAD && y < H - PAD;
 }
 
 function findNonOverlappingPosition(
@@ -123,14 +124,13 @@ function findNonOverlappingPosition(
 
     // If there's no overlap, we've found our position
     if (totalOverlap === 0 && isInBounds(candidateX, candidateY)) {
-      break;
+      return { x: candidateX, y: candidateY, overlap: totalOverlap };
     }
 
     // Move along the spiral
     angle += 0.1; // How quickly we rotate around the center
     radius += (step / (2 * Math.PI)) * angle; // Increase the spiral radius
   }
-
   return { x: bestX, y: bestY, overlap: bestOverlap };
 }
 
@@ -157,14 +157,14 @@ function drawRandomCubicCurve(
     ex = x + distance * Math.cos(angleInRadians);
     ey = y + distance * Math.sin(angleInRadians);
     if (!isInBounds(ex, ey)) {
-      if (ex < 0) {
-        ex = 0;
-      } else if (ex > W) {
-        ex = W;
-      } else if (ey < 0) {
-        ey = 0;
-      } else if (ey > H) {
-        ey = H;
+      if (ex < PAD) {
+        ex = PAD;
+      } else if (ex > W - PAD) {
+        ex = W - PAD;
+      } else if (ey < PAD) {
+        ey = PAD;
+      } else if (ey > H - PAD) {
+        ey = H - PAD;
       }
     }
     // Repulsion logic
@@ -174,14 +174,14 @@ function drawRandomCubicCurve(
       let overlapAdjustmentY = 0;
       // Collect set of overlapping nodes...
       let overlappingNodes = drawnNodes.filter((n) => {
-        const dx = ex - n.x;
-        const dy = ey - n.y;
+        const dx = ex! - n.x;
+        const dy = ey! - n.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
         return distance < n.size + flowerSize;
       });
       // If there are overlapping nodes, consider candidate positions within
       // THRESHHOLD pixels of the original position.
-      const threshold = distance / 8;
+      const threshold = distance * 0.6;
       // Perform the spiral search for a non-overlapping position
       const { x: newEx, y: newEy } = findNonOverlappingPosition(
         drawnNodes,
@@ -190,7 +190,6 @@ function drawRandomCubicCurve(
         flowerSize,
         threshold
       );
-
       // Use the new position if it's better
       if (newEx !== ex || newEy !== ey) {
         ex = newEx;
@@ -235,7 +234,6 @@ function drawRandomCubicCurve(
   ctx.moveTo(x, y);
   ctx.bezierCurveTo(cx1, cy1, cx2, cy2, ex, ey);
   ctx.stroke();
-
   return [ex, ey];
 }
 
@@ -279,8 +277,13 @@ function sortStemsBySelection(
 export function buildBaseScene(
   ctx: CanvasRenderingContext2D,
   stems: TreeNode[],
-  selectedLetters: Letter[]
+  selectedLetters: Letter[],
+  reset: boolean = true
 ) {
+  if (reset) {
+    curveCache = {};
+    drawnNodes = [];
+  }
   // Sort stems by whether or not they are selected...
   sortStemsBySelection(stems, selectedLetters);
   for (let i = 0; i < stems.length; i++) {
@@ -415,5 +418,5 @@ export function updateSceneForSelection(
   selectedLetters: Letter[]
 ) {
   ctx.clearRect(0, 0, W, H);
-  buildBaseScene(ctx, stems, selectedLetters);
+  buildBaseScene(ctx, stems, selectedLetters, false);
 }
