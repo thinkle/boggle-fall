@@ -17,7 +17,7 @@ type Mode =
 
 let defaultMode: Mode = "Thirty-One Words";
 let localMode = localStorage.getItem("mode");
-if (localMode && [INFINITE, FIFTEEN, TWO, THIRTY1].includes(localMode)) {
+if (localMode && [INFINITE, FIFTEEN, TWO, THIRTY1, SEVEN].includes(localMode)) {
   defaultMode = localMode;
 }
 
@@ -214,5 +214,12 @@ export const hintModes: { value: HintMode; label: string }[] = [
   { value: "stems", label: "🌸🌸 Easy" },
   { value: "none", label: "No Hints" },
 ];
-
-export let hintMode = writable<HintMode>("complete");
+let storedHintMode = localStorage.getItem("hintMode") || "";
+let defaultHintMode: HintMode = "complete";
+if (["complete", "stems", "none"].includes(storedHintMode)) {
+  defaultHintMode = storedHintMode as HintMode;
+}
+export let hintMode = writable<HintMode>(defaultHintMode);
+hintMode.subscribe(($hintMode) => {
+  localStorage.setItem("hintMode", $hintMode);
+});
