@@ -33,7 +33,9 @@ import { letterbank } from "./letterbank";
 import { derived, get, writable } from "svelte/store";
 import type { Writable } from "svelte/store";
 import { TreeNode } from "./trees";
+import { PseudoRandomGenerator } from "./pseudorandom";
 export { letterbank };
+export let prng = new PseudoRandomGenerator();
 
 export let words: Writable<Letter[][]> = writable([]);
 /* 
@@ -153,7 +155,7 @@ function generateInitialLetters() {
 }
 
 function getRandomLetter() {
-  let index = Math.floor(Math.random() * letterbank.length);
+  let index = Math.floor(prng.random() * letterbank.length);
   return letterbank[index];
 }
 

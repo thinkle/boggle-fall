@@ -208,16 +208,13 @@
   }
 
   function handleKeyboardInput(e: KeyboardEvent) {
-    console.log("KBD:", e.key);
     /* Typing can match any number of patterns... */
     if (e.key == "Backspace") {
-      console.log("Erase!");
       for (let p of keyboardPatterns) {
         p.pop();
       }
       if (keyboardPatterns.length && keyboardPatterns[0].length == 0) {
         // If we are empty, empty our pattern list.
-        console.log("Reset!");
         keyboardPatterns = [];
       }
     }
@@ -238,20 +235,17 @@
     }
     if (e.key.match(/^[A-Za-z]$/)) {
       let letterString = e.key.toLowerCase();
-      console.log("Letter!", letterString);
       // Get all letter blocks that match...
       let matchingLetters = $letters.filter(
         (ltr) => ltr.letter == letterString
       );
       if (matchingLetters.length == 0) {
-        console.log("No letter", letterString);
         return;
       }
       if (keyboardPatterns.length == 0) {
         // When we start, we find all matching letters
         // in our grid and each letter starts a potential
         // pattern
-        console.log("Starting fresh!");
         for (let ltr of matchingLetters) {
           keyboardPatterns.push([ltr]);
         }
@@ -379,7 +373,7 @@
     position: relative;
     z-index: 100;
   }
-  
+
   :root {
     font-family: "Bild Variable Web", sans-serif;
   }

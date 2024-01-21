@@ -1,43 +1,65 @@
 <script lang="ts">
-  import WordTree from './WordTree.svelte';
+  import WordTree from "./WordTree.svelte";
 
-  import { words, score, toLetters, bestGame, resetLetters, mode, startTime, timerDone, gameOver } from "./stores";
-  import { scoreWord } from './words';
-  
-  function resetGame () {
+  import {
+    words,
+    score,
+    toLetters,
+    bestGame,
+    resetLetters,
+    mode,
+    startTime,
+    timerDone,
+    gameOver,
+  } from "./stores";
+  import { scoreWord } from "./words";
+  import { prng } from "./stores";
+  function resetGame() {
     $words = [];
     $score = 0;
     $startTime = 0;
-    $timerDone = false; 
+    $timerDone = false;
     $gameOver = false;
     resetLetters();
   }
 
-  
-  let scores : {[key:string]:number}= {}
-  let bestScore : number;
+  function newGame() {
+    prng.reset(Math.floor(Math.random() * 100000000));
+    resetGame();
+  }
+
+  function replayGame() {
+    let seed = prng.getSeed();
+    prng.reset(seed);
+    resetGame();
+  }
+
+  let scores: { [key: string]: number } = {};
+  let bestScore: number;
   $: {
-    let bestWord = '';
+    let bestWord = "";
     bestScore = -1;
     for (let w of $words) {
       let word = toLetters(w);
-      scores[word] = scoreWord(word)
+      scores[word] = scoreWord(word);
       if (scores[word] > bestScore) {
         bestWord = word;
         bestScore = scores[word];
       }
     }
   }
-
 </script>
+
 <div>
-<h1>You scored {$score}</h1>
-{#if $bestGame}<h2>Your high score is {$bestGame.score}</h2>{/if}
-<button on:click={resetGame}>Play again?</button>
-  {#if $mode=='Thirty-One Words' && $words.length==31}
+  <h1>You scored {$score}</h1>
+  {#if $bestGame}<h2>Your high score is {$bestGame.score}</h2>{/if}
+  <button on:click={newGame}>New Game</button>
+  <button on:click={replayGame}>Replay</button>
+  {#if $mode == "Thirty-One Words" && $words.length == 31}
     <WordTree min={1} max={31} {scores} {bestScore}></WordTree>
   {/if}
 </div>
+
 <style>
   div {
     text-align: center;

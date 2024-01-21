@@ -1,7 +1,7 @@
 <script lang="ts">
   import { fade, fly } from "svelte/transition";
   import Score from "./Score.svelte";
-  
+
   import {
     words,
     mode,
@@ -15,7 +15,7 @@
   } from "./stores";
   import Countdown from "./Countdown.svelte";
   import Hints from "./Hints.svelte";
-  import {shorten} from './util';
+  import { shorten } from "./util";
   export let score: number;
   let info = false;
   let modes = [THIRTY1, FIFTEEN, SEVEN, TWO, INFINITE];
@@ -33,8 +33,7 @@
   }
   let innerWidth = 0;
 
-  function maybeShorten (word: string, innerWidth: number) {
-    console.log('Shorten?',word,innerWidth)
+  function maybeShorten(word: string, innerWidth: number) {
     if (innerWidth < 600) {
       return shorten(word, 8);
     } else {
@@ -53,13 +52,13 @@
   <button on:click={() => (info = !info)}>?</button>
   <select bind:value={$mode}>
     {#each modes as m}
-      <option value={m}>{maybeShorten(m,innerWidth)}</option>
+      <option value={m}>{maybeShorten(m, innerWidth)}</option>
     {/each}
-  </select>  
-  <div class="horiz">    
+  </select>
+  <div class="horiz">
     <select bind:value={$hintMode}>
       {#each hintModes as m}
-        <option value={m.value}>{maybeShorten(m.label,innerWidth)}</option>
+        <option value={m.value}>{maybeShorten(m.label, innerWidth)}</option>
       {/each}
     </select>
     <Hints />
@@ -106,10 +105,15 @@
     <p>
       The bouquet of flowers is a map of all the words available on the board.
       The bigger the flower, the higher scoring the word. The longer the stem,
-      the longer the word.</p>
-    <p>In regular hint mode, you'll see your word highlighted in the bouquet.</p>
-    <p>In easy hint mode, you'll see all the words you can make with the letters
-      you've selected highlighted in the bouquet.</p>
+      the longer the word.
+    </p>
+    <p>
+      In regular hint mode, you'll see your word highlighted in the bouquet.
+    </p>
+    <p>
+      In easy hint mode, you'll see all the words you can make with the letters
+      you've selected highlighted in the bouquet.
+    </p>
     <button on:click={() => (info = false)}>Got it!</button>
   </div>
 {/if}
@@ -209,5 +213,4 @@
     font-size: 1.2rem;
     font-weight: bold;
   }
- 
 </style>
