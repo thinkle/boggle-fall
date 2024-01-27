@@ -20,6 +20,7 @@
     startTime,
     gameOver,
     hintMode,
+    prng,
   } from "./stores";
   import HintTree2D from "./HintTree2D.svelte";
 
@@ -32,6 +33,8 @@
         score: $score,
         date: new Date(),
         mode: $mode,
+        seed: prng.getSeed(),
+        seedMode: prng.mode,
       },
     ];
     $selected = [];

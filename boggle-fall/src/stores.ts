@@ -15,7 +15,7 @@ type Mode =
   | "Seven Words"
   | "∞ Words";
 
-let defaultMode: Mode = "Thirty-One Words";
+let defaultMode: Mode = "Seven Words";
 let localMode = localStorage.getItem("mode");
 if (localMode && [INFINITE, FIFTEEN, TWO, THIRTY1, SEVEN].includes(localMode)) {
   defaultMode = localMode;
@@ -166,6 +166,8 @@ type GameHistory = {
   score: number;
   date: Date;
   mode: Mode;
+  seed?: number;
+  seedMode?: "daily" | "random";
 };
 
 export let gameHistory: Writable<GameHistory[]> = writable([]);
